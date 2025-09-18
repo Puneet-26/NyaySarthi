@@ -18,6 +18,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
+import { Chat } from '@/components/chat';
 
 export default function Home() {
   const [analysisResults, setAnalysisResults] = useState<
@@ -148,12 +150,18 @@ export default function Home() {
       </header>
 
       {analysisResults === null ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 p-4 text-center">
+        <div className="flex flex-1 flex-col items-center justify-start gap-6 p-4 text-center">
+          <div className="w-full max-w-4xl py-8">
+            <Chat />
+          </div>
+
+          <Separator className="my-4" />
+
           <div className="rounded-full border bg-card p-4">
             <Bot size={48} className="text-primary" />
           </div>
           <h2 className="font-headline text-3xl font-semibold">
-            Unlock AI-Powered Legal Insights
+            Or, Analyze a Legal Document
           </h2>
           <p className="max-w-xl text-muted-foreground">
             Upload your legal documents and let Legali break down complex

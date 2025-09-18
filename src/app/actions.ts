@@ -5,6 +5,7 @@ import {
   assessClauseRisk,
   ClauseRiskAssessmentOutput,
 } from '@/ai/flows/clause-risk-assessment';
+import { askLegalChatbot } from '@/ai/flows/legal-chatbot';
 import { simplifyLegalClause } from '@/ai/flows/layman-view-simplification';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
@@ -80,6 +81,20 @@ export async function getLaymanView(
     return {
       error:
         e.message || 'An unknown error occurred during simplification.',
+    };
+  }
+}
+
+export async function getChatbotResponse(
+  query: string
+): Promise<{ data?: string; error?: string }> {
+  try {
+    const result = await askLegalChatbot({ query });
+    return { data: result.response };
+  } catch (e: any) {
+    console.error('Chatbot failed:', e);
+    return {
+      error: e.message || 'An unknown error occurred during chat.',
     };
   }
 }
