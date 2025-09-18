@@ -5,7 +5,7 @@ import { analyzeDocument } from '@/app/actions';
 import type { ClauseAnalysis } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, FileText, Bot, UploadCloud, X } from 'lucide-react';
+import { Loader2, FileText, Bot, UploadCloud, X, PanelLeft, History } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ClauseCard } from '@/components/clause-card';
@@ -20,6 +20,14 @@ import {
 } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
 import { Chat } from '@/components/chat';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import type { Message } from '@/components/chat';
 
 export default function Home() {
   const [analysisResults, setAnalysisResults] = useState<
@@ -29,6 +37,8 @@ export default function Home() {
   const { toast } = useToast();
   const [file, setFile] = useState<File | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [chatHistory, setChatHistory] = useState<Message[]>([]);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const handleFileChange = (selectedFile: File | null) => {
     if (selectedFile) {
@@ -56,7 +66,7 @@ export default function Home() {
     setIsDragOver(false);
     const selectedFile = event.dataTransfer.files?.[0] || null;
     handleFileChange(selectedFile);
-  }, [toast]);
+  }, []);
 
   const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -96,6 +106,7 @@ export default function Home() {
             setAnalysisResults(null);
           } else {
             setAnalysisResults(result.data || []);
+            setIsHistoryOpen(false); // Close history when showing analysis
           }
         }
       };
@@ -136,11 +147,27 @@ export default function Home() {
       .getElementById(`clause-${clauseNumber}`)
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+  
+  const handleNewAnalysis = () => {
+    setAnalysisResults(null);
+    setFile(null);
+    setIsHistoryOpen(true);
+  }
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
       <header className="flex h-16 items-center justify-between border-b px-4 sm:px-6">
         <div className="flex items-center gap-4">
+          {(analysisResults === null || chatHistory.length > 0) && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsHistoryOpen(prev => !prev)}
+              className="h-8 w-8"
+            >
+              <PanelLeft className="h-5 w-5" />
+            </Button>
+          )}
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
             Legali
@@ -148,164 +175,176 @@ export default function Home() {
         </div>
         <ThemeToggle />
       </header>
-
-      {analysisResults === null ? (
-        <div className="flex flex-1 flex-col items-center justify-start gap-6 p-4 text-center">
-          <div className="w-full max-w-4xl py-8">
-            <Chat />
-          </div>
-
-          <Separator className="my-4" />
-
-          <div className="rounded-full border bg-card p-4">
-            <Bot size={48} className="text-primary" />
-          </div>
-          <h2 className="font-headline text-3xl font-semibold">
-            Or, Analyze a Legal Document
-          </h2>
-          <p className="max-w-xl text-muted-foreground">
-            Upload your legal documents and let Legali break down complex
-            clauses, assess risks, and provide easy-to-understand explanations.
-          </p>
-
-          <div
-            className={cn(
-              'relative w-full max-w-lg rounded-lg border-2 border-dashed border-muted-foreground/50 p-8 transition-colors',
-              isDragOver && 'border-primary bg-primary/10'
-            )}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-          >
-            <input
-              type="file"
-              id="file-upload"
-              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-              onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-              accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt,.md"
-            />
-            {!file ? (
-              <div className="flex flex-col items-center gap-4">
-                <UploadCloud className="h-12 w-12 text-muted-foreground" />
-                <p className="text-muted-foreground">
-                  Drag & drop your document here, or{' '}
-                  <label
-                    htmlFor="file-upload"
-                    className="cursor-pointer font-semibold text-primary underline-offset-4 hover:underline"
-                  >
-                    browse files
-                  </label>
-                </p>
-                <p className="text-xs text-muted-foreground/80">
-                  Supported formats: .doc, .docx, .txt, .md
-                </p>
-              </div>
-            ) : (
-              <div className="relative flex flex-col items-center gap-3">
-                <FileText className="h-12 w-12 text-primary" />
-                <p className="font-medium">{file.name}</p>
-                <button
-                  onClick={() => setFile(null)}
-                  className="absolute -right-2 -top-2 rounded-full bg-muted p-1 text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          <Button
-            size="lg"
-            onClick={handleAnalysis}
-            disabled={isPending || !file}
-            className="bg-accent text-accent-foreground hover:bg-accent/90"
-          >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Analyzing...
-              </>
-            ) : (
-              'Analyze Document'
-            )}
-          </Button>
-        </div>
-      ) : (
-        <div className="flex flex-1 overflow-hidden">
-          <aside className="hidden w-72 flex-col border-r bg-card/50 lg:flex">
-            <div className="flex h-14 items-center justify-between border-b px-4">
-              <h2 className="font-headline text-lg font-semibold">
-                Document Summary
-              </h2>
-              <Button variant="ghost" size="sm" onClick={() => {
-                setAnalysisResults(null);
-                setFile(null);
-              }}>
-                New
-              </Button>
-            </div>
-            <ScrollArea className="flex-1">
-              <TooltipProvider>
-                <nav className="grid gap-1 p-2">
-                  {analysisResults.map(clause => (
-                    <Tooltip key={clause.clauseNumber}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className={cn(
-                            'justify-start gap-3 border border-transparent',
-                            riskColorMap[clause.riskLevel].base,
-                            riskColorMap[clause.riskLevel].hover
-                          )}
-                          onClick={() => scrollToClause(clause.clauseNumber)}
-                        >
-                          <span
-                            className={cn(
-                              'font-bold',
-                              riskColorMap[clause.riskLevel].text
-                            )}
-                          >
-                            {String(clause.clauseNumber).padStart(2, '0')}
-                          </span>
-                          <span className="truncate text-left text-sm text-muted-foreground">
-                            {clause.clauseText}
-                          </span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right">
-                        <p className="max-w-xs">{clause.clauseText}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ))}
-                </nav>
-              </TooltipProvider>
-            </ScrollArea>
-          </aside>
+      <div className="flex flex-1 overflow-hidden">
+        {isHistoryOpen && (
+           <aside className="hidden w-72 flex-col border-r bg-card/50 lg:flex">
+             <div className="flex h-14 items-center border-b px-4">
+               <h2 className="font-headline text-lg font-semibold">Chat History</h2>
+             </div>
+             <Chat isHistoryPanel={true} messages={chatHistory} />
+           </aside>
+        )}
+        {analysisResults === null ? (
           <main className="flex-1 overflow-y-auto">
-            <div className="p-4 sm:p-6 lg:p-8">
-              <div className="mb-6">
-                <h1 className="font-headline text-3xl font-bold">
-                  Clause Analysis
-                </h1>
-                <p className="text-muted-foreground">
-                  Detailed breakdown of your document.
-                </p>
+            <div className="flex flex-col items-center justify-start gap-6 p-4 text-center">
+              <div className="w-full max-w-4xl py-8">
+                <Chat 
+                  onMessagesChange={setChatHistory} 
+                  isHistoryPanel={false} 
+                  messages={chatHistory} 
+                />
               </div>
-              <div className="grid gap-6">
-                {isPending && analysisResults.length === 0 ? (
-                  <div className="flex h-96 items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+
+              <Separator className="my-4" />
+
+              <div className="rounded-full border bg-card p-4">
+                <Bot size={48} className="text-primary" />
+              </div>
+              <h2 className="font-headline text-3xl font-semibold">
+                Or, Analyze a Legal Document
+              </h2>
+              <p className="max-w-xl text-muted-foreground">
+                Upload your legal documents and let Legali break down complex
+                clauses, assess risks, and provide easy-to-understand explanations.
+              </p>
+
+              <div
+                className={cn(
+                  'relative w-full max-w-lg rounded-lg border-2 border-dashed border-muted-foreground/50 p-8 transition-colors',
+                  isDragOver && 'border-primary bg-primary/10'
+                )}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+              >
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                  onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+                  accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt,.md"
+                />
+                {!file ? (
+                  <div className="flex flex-col items-center gap-4">
+                    <UploadCloud className="h-12 w-12 text-muted-foreground" />
+                    <p className="text-muted-foreground">
+                      Drag & drop your document here, or{' '}
+                      <label
+                        htmlFor="file-upload"
+                        className="cursor-pointer font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        browse files
+                      </label>
+                    </p>
+                    <p className="text-xs text-muted-foreground/80">
+                      Supported formats: .doc, .docx, .txt, .md
+                    </p>
                   </div>
                 ) : (
-                  analysisResults.map(clause => (
-                    <ClauseCard key={clause.clauseNumber} clause={clause} />
-                  ))
+                  <div className="relative flex flex-col items-center gap-3">
+                    <FileText className="h-12 w-12 text-primary" />
+                    <p className="font-medium">{file.name}</p>
+                    <button
+                      onClick={() => setFile(null)}
+                      className="absolute -right-2 -top-2 rounded-full bg-muted p-1 text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
                 )}
               </div>
+
+              <Button
+                size="lg"
+                onClick={handleAnalysis}
+                disabled={isPending || !file}
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  'Analyze Document'
+                )}
+              </Button>
             </div>
           </main>
-        </div>
-      )}
+        ) : (
+          <>
+            <aside className="hidden w-72 flex-col border-r bg-card/50 lg:flex">
+              <div className="flex h-14 items-center justify-between border-b px-4">
+                <h2 className="font-headline text-lg font-semibold">
+                  Document Summary
+                </h2>
+                <Button variant="ghost" size="sm" onClick={handleNewAnalysis}>
+                  New
+                </Button>
+              </div>
+              <ScrollArea className="flex-1">
+                <TooltipProvider>
+                  <nav className="grid gap-1 p-2">
+                    {analysisResults.map(clause => (
+                      <Tooltip key={clause.clauseNumber}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className={cn(
+                              'justify-start gap-3 border border-transparent',
+                              riskColorMap[clause.riskLevel].base,
+                              riskColorMap[clause.riskLevel].hover
+                            )}
+                            onClick={() => scrollToClause(clause.clauseNumber)}
+                          >
+                            <span
+                              className={cn(
+                                'font-bold',
+                                riskColorMap[clause.riskLevel].text
+                              )}
+                            >
+                              {String(clause.clauseNumber).padStart(2, '0')}
+                            </span>
+                            <span className="truncate text-left text-sm text-muted-foreground">
+                              {clause.clauseText}
+                            </span>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          <p className="max-w-xs">{clause.clauseText}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ))}
+                  </nav>
+                </TooltipProvider>
+              </ScrollArea>
+            </aside>
+            <main className="flex-1 overflow-y-auto">
+              <div className="p-4 sm:p-6 lg:p-8">
+                <div className="mb-6">
+                  <h1 className="font-headline text-3xl font-bold">
+                    Clause Analysis
+                  </h1>
+                  <p className="text-muted-foreground">
+                    Detailed breakdown of your document.
+                  </p>
+                </div>
+                <div className="grid gap-6">
+                  {isPending && analysisResults.length === 0 ? (
+                    <div className="flex h-96 items-center justify-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
+                  ) : (
+                    analysisResults.map(clause => (
+                      <ClauseCard key={clause.clauseNumber} clause={clause} />
+                    ))
+                  )}
+                </div>
+              </div>
+            </main>
+          </>
+        )}
+      </div>
     </div>
   );
 }

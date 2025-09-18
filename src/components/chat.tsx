@@ -1,37 +1,43 @@
 'use client';
 
-import { useState, useTransition, useRef, useEffect } from 'react';
-import { Bot, Loader2, Send, User, History } from 'lucide-react';
+import { useState, useTransition, useRef, useEffect, useCallback } from 'react';
+import { Bot, Loader2, Send, User } from 'lucide-react';
 import { getChatbotResponse } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
-type Message = {
+export type Message = {
   role: 'user' | 'bot';
   content: string;
 };
 
-export function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+type ChatProps = {
+  isHistoryPanel?: boolean;
+  messages: Message[];
+  onMessagesChange?: (messages: Message[]) => void;
+};
+
+
+export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: ChatProps) {
   const [input, setInput] = useState('');
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
+  const setMessages = useCallback((updater: (prev: Message[]) => Message[]) => {
+    if (onMessagesChange) {
+      onMessagesChange(updater(messages));
+    }
+  }, [messages, onMessagesChange]);
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || !onMessagesChange) return;
 
     const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
@@ -39,33 +45,33 @@ export function Chat() {
 
     startTransition(async () => {
       const result = await getChatbotResponse(input);
+      let botMessage: Message;
       if (result.error) {
         toast({
           variant: 'destructive',
           title: 'Chatbot Error',
           description: result.error,
         });
-        const errorMessage: Message = {
+        botMessage = {
           role: 'bot',
           content: 'Sorry, I ran into an error. Please try again.',
         };
-        setMessages(prev => [...prev, errorMessage]);
       } else {
-        const botMessage: Message = {
+        botMessage = {
           role: 'bot',
           content: result.data || 'No response available.',
         };
-        setMessages(prev => [...prev, botMessage]);
       }
+      setMessages(prev => [...prev, botMessage]);
     });
   };
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({
-        top: scrollAreaRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
+      const viewport = scrollAreaRef.current.querySelector('div');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
     }
   }, [messages]);
 
@@ -105,6 +111,19 @@ export function Chat() {
       </div>
     ))
   );
+  
+  if (isHistoryPanel) {
+    return (
+      <ScrollArea className="h-full">
+        <div className="space-y-6 p-4">
+          {messages.length === 0 ? (
+            <p className="p-4 text-sm text-center text-muted-foreground">No chat history yet.</p>
+          ) : renderMessages(messages)}
+        </div>
+      </ScrollArea>
+    );
+  }
+
 
   return (
     <div className="flex h-full max-h-[70vh] w-full flex-col">
@@ -120,24 +139,6 @@ export function Chat() {
             <p className="text-muted-foreground">Ask me any legal question</p>
           </div>
         </div>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" disabled={messages.length === 0}>
-              <History className="h-5 w-5" />
-              <span className="sr-only">View Chat History</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Chat History</SheetTitle>
-            </SheetHeader>
-            <ScrollArea className="h-[calc(100%-4rem)]">
-              <div className="space-y-6 p-4">
-                {renderMessages(messages)}
-              </div>
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
       </div>
       <ScrollArea className="flex-1" ref={scrollAreaRef}>
         <div className="space-y-6 p-4">
