@@ -1,13 +1,20 @@
 'use client';
 
 import { useState, useTransition, useRef, useEffect } from 'react';
-import { Bot, Loader2, Send, User } from 'lucide-react';
+import { Bot, Loader2, Send, User, History } from 'lucide-react';
 import { getChatbotResponse } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
 type Message = {
@@ -62,55 +69,93 @@ export function Chat() {
     }
   }, [messages]);
 
+  const renderMessages = (messageList: Message[]) => (
+    messageList.map((message, index) => (
+      <div
+        key={index}
+        className={cn(
+          'flex items-start gap-4',
+          message.role === 'user' ? 'justify-end' : ''
+        )}
+      >
+        {message.role === 'bot' && (
+          <Avatar className="h-8 w-8">
+            <AvatarFallback>
+              <Bot className="h-5 w-5" />
+            </AvatarFallback>
+          </Avatar>
+        )}
+        <div
+          className={cn(
+            'max-w-md rounded-lg p-3',
+            message.role === 'user'
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-muted'
+          )}
+        >
+          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        </div>
+        {message.role === 'user' && (
+          <Avatar className="h-8 w-8">
+            <AvatarFallback>
+              <User className="h-5 w-5" />
+            </AvatarFallback>
+          </Avatar>
+        )}
+      </div>
+    ))
+  );
+
   return (
     <div className="flex h-full max-h-[70vh] w-full flex-col">
-       <div className="flex items-center gap-4 p-4">
-        <div className="rounded-full border bg-card p-3">
-          <Bot size={32} className="text-primary" />
+       <div className="flex items-center justify-between gap-4 p-4">
+        <div className="flex items-center gap-4">
+          <div className="rounded-full border bg-card p-3">
+            <Bot size={32} className="text-primary" />
+          </div>
+          <div>
+            <h2 className="font-headline text-3xl font-semibold">
+              Legal.ai Chat
+            </h2>
+            <p className="text-muted-foreground">Ask me any legal question</p>
+          </div>
         </div>
-        <div>
-          <h2 className="font-headline text-3xl font-semibold">
-            Legal.ai Chat
-          </h2>
-          <p className="text-muted-foreground">Ask me any legal question</p>
-        </div>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" disabled={messages.length === 0}>
+              <History className="h-5 w-5" />
+              <span className="sr-only">View Chat History</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Chat History</SheetTitle>
+            </SheetHeader>
+            <ScrollArea className="h-[calc(100%-4rem)]">
+              <div className="space-y-6 p-4">
+                {renderMessages(messages)}
+              </div>
+            </ScrollArea>
+          </SheetContent>
+        </Sheet>
       </div>
       <ScrollArea className="flex-1" ref={scrollAreaRef}>
         <div className="space-y-6 p-4">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={cn(
-                'flex items-start gap-4',
-                message.role === 'user' ? 'justify-end' : ''
-              )}
-            >
-              {message.role === 'bot' && (
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>
-                    <Bot className="h-5 w-5" />
-                  </AvatarFallback>
-                </Avatar>
-              )}
-              <div
-                className={cn(
-                  'max-w-md rounded-lg p-3',
-                  message.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted'
-                )}
-              >
-                <p className="text-sm">{message.content}</p>
+          {messages.length === 0 && (
+             <div className="flex items-start gap-4">
+              <Avatar className="h-8 w-8">
+                <AvatarFallback>
+                  <Bot className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="max-w-md rounded-lg bg-muted p-3">
+                <p className="text-sm">
+                  Welcome to Legal.ai Chat! Ask me any legal question. Please note, I am an AI assistant and not a substitute for a qualified legal professional.
+                </p>
               </div>
-              {message.role === 'user' && (
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>
-                    <User className="h-5 w-5" />
-                  </AvatarFallback>
-                </Avatar>
-              )}
             </div>
-          ))}
+          )}
+          {renderMessages(messages)}
           {isPending && (
             <div className="flex items-start gap-4">
               <Avatar className="h-8 w-8">
