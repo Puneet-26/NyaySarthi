@@ -2,17 +2,18 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bot, PanelLeft, History, Database } from 'lucide-react';
+import { Bot, PanelLeft, FileText, Database } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Chat } from '@/components/chat';
 import type { Message } from '@/components/chat';
 import { DataExplorer } from '@/components/data-explorer';
+import { DocumentAnalyzer } from '@/components/document-analyzer';
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeView, setActiveView] = useState<'chat' | 'explorer'>('chat');
+  const [activeView, setActiveView] = useState<'chat' | 'explorer' | 'analysis'>('analysis');
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -43,6 +44,14 @@ export default function Home() {
             </div>
             <nav className="flex flex-col gap-1 p-2">
                <Button
+                variant={activeView === 'analysis' ? 'secondary' : 'ghost'}
+                className="justify-start gap-3"
+                onClick={() => setActiveView('analysis')}
+              >
+                <FileText className="h-5 w-5" />
+                <span>Document Analysis</span>
+              </Button>
+               <Button
                 variant={activeView === 'chat' ? 'secondary' : 'ghost'}
                 className="justify-start gap-3"
                 onClick={() => setActiveView('chat')}
@@ -62,7 +71,7 @@ export default function Home() {
           </aside>
         )}
         <main className="flex-1 overflow-y-auto">
-          {activeView === 'chat' ? (
+          {activeView === 'chat' && (
             <div className="flex h-full flex-col items-center justify-center gap-6 p-4 text-center">
               <div className="w-full max-w-4xl flex-1">
                 <Chat
@@ -72,9 +81,9 @@ export default function Home() {
                 />
               </div>
             </div>
-          ) : (
-            <DataExplorer />
           )}
+          {activeView === 'explorer' && <DataExplorer />}
+          {activeView === 'analysis' && <DocumentAnalyzer />}
         </main>
       </div>
     </div>
