@@ -29,7 +29,7 @@ export default function Home() {
           </Button>
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
-            Legali
+            NyaySetu
           </h1>
         </div>
         <ThemeToggle />

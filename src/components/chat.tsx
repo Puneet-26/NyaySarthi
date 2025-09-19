@@ -134,7 +134,7 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
           </div>
           <div>
             <h2 className="font-headline text-3xl font-semibold">
-              Legal.ai Chat
+              NyaySetu Chat
             </h2>
             <p className="text-muted-foreground">Ask me any legal question</p>
           </div>
@@ -151,7 +151,7 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
               </Avatar>
               <div className="max-w-md rounded-lg bg-muted p-3">
                 <p className="text-sm">
-                  Welcome to Legal.ai Chat! Ask me any legal question. Please note, I am an AI assistant and not a substitute for a qualified legal professional.
+                  Welcome to NyaySetu Chat! Ask me any legal question. Please note, I am an AI assistant and not a substitute for a qualified legal professional.
                 </p>
               </div>
             </div>

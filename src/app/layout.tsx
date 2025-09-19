@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Legali - AI Legal Analysis',
+  title: 'NyaySetu - AI Legal Analysis',
   description: 'Analyze legal documents clause by clause with AI.',
 };
 
