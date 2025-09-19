@@ -11,7 +11,7 @@ import { DataExplorer } from '@/components/data-explorer';
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeView, setActiveView] = useState<'chat' | 'explorer'>('chat');
 
   return (
@@ -21,7 +21,7 @@ export default function Home() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setIsHistoryOpen(prev => !prev)}
+            onClick={() => setIsSidebarOpen(prev => !prev)}
             className="h-8 w-8"
           >
             <PanelLeft className="h-5 w-5" />
@@ -34,7 +34,7 @@ export default function Home() {
         <ThemeToggle />
       </header>
       <div className="flex flex-1 overflow-hidden">
-        {isHistoryOpen && (
+        {isSidebarOpen && (
           <aside className="hidden w-72 flex-col border-r bg-card/50 lg:flex">
             <div className="flex h-14 items-center border-b px-4">
               <h2 className="font-headline text-lg font-semibold">
@@ -47,8 +47,8 @@ export default function Home() {
                 className="justify-start gap-3"
                 onClick={() => setActiveView('chat')}
               >
-                <History className="h-5 w-5" />
-                <span>Chat History</span>
+                <Bot className="h-5 w-5" />
+                <span>Chat</span>
               </Button>
               <Button
                 variant={activeView === 'explorer' ? 'secondary' : 'ghost'}
@@ -59,9 +59,6 @@ export default function Home() {
                 <span>Data Explorer</span>
               </Button>
             </nav>
-            {activeView === 'chat' && (
-              <Chat isHistoryPanel={true} messages={chatHistory} />
-            )}
           </aside>
         )}
         <main className="flex-1 overflow-y-auto">
