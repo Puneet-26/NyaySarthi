@@ -1,28 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import type { ClauseAnalysis } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Bot, PanelLeft, History, Database } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { cn } from '@/lib/utils';
 import { Chat } from '@/components/chat';
 import type { Message } from '@/components/chat';
 import { DataExplorer } from '@/components/data-explorer';
 
 export default function Home() {
-  const [analysisResults, setAnalysisResults] = useState<
-    ClauseAnalysis[] | null
-  >(null);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(true);
   const [activeView, setActiveView] = useState<'chat' | 'explorer'>('chat');
-
-  const handleNewAnalysis = () => {
-    setAnalysisResults(null);
-    setIsHistoryOpen(true);
-  };
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
