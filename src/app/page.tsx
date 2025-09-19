@@ -19,14 +19,6 @@ export default function Home() {
     <div className="flex h-screen w-full flex-col bg-background">
       <header className="flex h-16 items-center justify-between border-b px-4 sm:px-6">
         <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsSidebarOpen(prev => !prev)}
-            className="h-8 w-8"
-          >
-            <PanelLeft className="h-5 w-5" />
-          </Button>
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
             NyaySetu
