@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bot, PanelLeft, FileText, Database } from 'lucide-react';
+import { Home as HomeIcon, PanelLeft, Database } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Chat } from '@/components/chat';
@@ -13,7 +13,7 @@ import { DocumentAnalyzer } from '@/components/document-analyzer';
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeView, setActiveView] = useState<'chat' | 'explorer' | 'analysis'>('analysis');
+  const [activeView, setActiveView] = useState<'home' | 'explorer'>('home');
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -44,20 +44,12 @@ export default function Home() {
             </div>
             <nav className="flex flex-col gap-1 p-2">
                <Button
-                variant={activeView === 'analysis' ? 'secondary' : 'ghost'}
+                variant={activeView === 'home' ? 'secondary' : 'ghost'}
                 className="justify-start gap-3"
-                onClick={() => setActiveView('analysis')}
+                onClick={() => setActiveView('home')}
               >
-                <FileText className="h-5 w-5" />
-                <span>Document Analysis</span>
-              </Button>
-               <Button
-                variant={activeView === 'chat' ? 'secondary' : 'ghost'}
-                className="justify-start gap-3"
-                onClick={() => setActiveView('chat')}
-              >
-                <Bot className="h-5 w-5" />
-                <span>Chat</span>
+                <HomeIcon className="h-5 w-5" />
+                <span>Home</span>
               </Button>
               <Button
                 variant={activeView === 'explorer' ? 'secondary' : 'ghost'}
@@ -71,19 +63,23 @@ export default function Home() {
           </aside>
         )}
         <main className="flex-1 overflow-y-auto">
-          {activeView === 'chat' && (
-            <div className="flex h-full flex-col items-center justify-center gap-6 p-4 text-center">
-              <div className="w-full max-w-4xl flex-1">
-                <Chat
-                  onMessagesChange={setChatHistory}
-                  isHistoryPanel={false}
-                  messages={chatHistory}
-                />
+          {activeView === 'home' && (
+            <div className="flex h-full flex-col">
+              <div className="flex items-center justify-center p-4">
+                <div className="w-full max-w-4xl flex-1">
+                  <Chat
+                    onMessagesChange={setChatHistory}
+                    isHistoryPanel={false}
+                    messages={chatHistory}
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <DocumentAnalyzer />
               </div>
             </div>
           )}
           {activeView === 'explorer' && <DataExplorer />}
-          {activeView === 'analysis' && <DocumentAnalyzer />}
         </main>
       </div>
     </div>
