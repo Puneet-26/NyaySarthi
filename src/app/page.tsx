@@ -186,89 +186,14 @@ export default function Home() {
         )}
         {analysisResults === null ? (
           <main className="flex-1 overflow-y-auto">
-            <div className="flex flex-col items-center justify-start gap-6 p-4 text-center">
-              <div className="w-full max-w-4xl py-8">
+            <div className="flex h-full flex-col items-center justify-center gap-6 p-4 text-center">
+              <div className="w-full max-w-4xl flex-1">
                 <Chat 
                   onMessagesChange={setChatHistory} 
                   isHistoryPanel={false} 
                   messages={chatHistory} 
                 />
               </div>
-
-              <Separator className="my-4" />
-
-              <div className="rounded-full border bg-card p-4">
-                <Bot size={48} className="text-primary" />
-              </div>
-              <h2 className="font-headline text-3xl font-semibold">
-                Or, Analyze a Legal Document
-              </h2>
-              <p className="max-w-xl text-muted-foreground">
-                Upload your legal documents and let Legali break down complex
-                clauses, assess risks, and provide easy-to-understand explanations.
-              </p>
-
-              <div
-                className={cn(
-                  'relative w-full max-w-lg rounded-lg border-2 border-dashed border-muted-foreground/50 p-8 transition-colors',
-                  isDragOver && 'border-primary bg-primary/10'
-                )}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-              >
-                <input
-                  type="file"
-                  id="file-upload"
-                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                  onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                  accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt,.md"
-                />
-                {!file ? (
-                  <div className="flex flex-col items-center gap-4">
-                    <UploadCloud className="h-12 w-12 text-muted-foreground" />
-                    <p className="text-muted-foreground">
-                      Drag & drop your document here, or{' '}
-                      <label
-                        htmlFor="file-upload"
-                        className="cursor-pointer font-semibold text-primary underline-offset-4 hover:underline"
-                      >
-                        browse files
-                      </label>
-                    </p>
-                    <p className="text-xs text-muted-foreground/80">
-                      Supported formats: .doc, .docx, .txt, .md
-                    </p>
-                  </div>
-                ) : (
-                  <div className="relative flex flex-col items-center gap-3">
-                    <FileText className="h-12 w-12 text-primary" />
-                    <p className="font-medium">{file.name}</p>
-                    <button
-                      onClick={() => setFile(null)}
-                      className="absolute -right-2 -top-2 rounded-full bg-muted p-1 text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <Button
-                size="lg"
-                onClick={handleAnalysis}
-                disabled={isPending || !file}
-                className="bg-accent text-accent-foreground hover:bg-accent/90"
-              >
-                {isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  'Analyze Document'
-                )}
-              </Button>
             </div>
           </main>
         ) : (
