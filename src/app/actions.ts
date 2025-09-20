@@ -1,9 +1,7 @@
 'use server';
 
-import {
-  assessClauseRisk,
-  ClauseRiskAssessmentOutput,
-} from '@/ai/flows/clause-risk-assessment';
+import { assessClauseRisk } from '@/ai/flows/clause-risk-assessment';
+import { type ClauseRiskAssessment } from '@/ai/schemas/clause-risk-assessment';
 import { askLegalChatbot } from '@/ai/flows/legal-chatbot';
 import { simplifyLegalClause } from '@/ai/flows/layman-view-simplification';
 import { generateMindMap, MindMapNode } from '@/ai/flows/mind-map-generator';
@@ -47,28 +45,25 @@ export async function analyzeDocument(fileInfo: {
       return { error: 'Could not extract text from the document.' };
     }
 
-    const clauses = documentText
-      .split(/(?=Clause \d+\.|[0-9]+\.)/g)
-      .map(s => s.trim())
-      .filter(Boolean);
+    const assessmentResult = await assessClauseRisk({ documentText });
 
-    if (clauses.length === 0) {
-      return { text: documentText, clauses: [], error: 'No clauses found in the document. Ensure clauses are prefixed with "Clause X." or "X.".' };
-    }
-
-    const analysisPromises = clauses.map(async (clauseText, index) => {
-      const result: ClauseRiskAssessmentOutput = await assessClauseRisk({
-        clauseText,
-      });
+    if (!assessmentResult.clauses || assessmentResult.clauses.length === 0) {
       return {
-        clauseNumber: index + 1,
-        clauseText,
-        ...result,
+        text: documentText,
+        clauses: [],
+        error:
+          'No clauses were found or analyzed in the document. Ensure the document is well-formatted.',
       };
-    });
+    }
+    
+    // The AI might not return clause numbers, so we'll add them.
+    const clausesWithNumbers: ClauseAnalysis[] = assessmentResult.clauses.map((clause, index) => ({
+      ...clause,
+      clauseNumber: clause.clauseNumber || index + 1,
+    }));
 
-    const results = await Promise.all(analysisPromises);
-    return { text: documentText, clauses: results as ClauseAnalysis[] };
+    return { text: documentText, clauses: clausesWithNumbers };
+
   } catch (e: any) {
     console.error('Analysis failed:', e);
     return { error: e.message || 'An unknown error occurred during analysis.' };
@@ -92,7 +87,7 @@ export async function getLaymanView(
 
 export async function getChatbotResponse(
   query: string
-): Promise<{ data?: string; error?: string }> {
+): Promise<{ data?: string; error?:string }> {
   try {
     const result = await askLegalChatbot({ query });
     return { data: result.response };

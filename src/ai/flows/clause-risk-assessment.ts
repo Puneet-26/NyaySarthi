@@ -1,44 +1,23 @@
 'use server';
 
 /**
- * @fileOverview This file defines a Genkit flow for assessing the risk level of clauses in legal documents.
+ * @fileOverview This file defines a Genkit flow for assessing the risk level of clauses in a legal document.
  *
  * It includes:
  * - `assessClauseRisk`: An async function to initiate the clause risk assessment flow.
- * - `ClauseRiskAssessmentInput`: The input type for the assessClauseRisk function.
- * - `ClauseRiskAssessmentOutput`: The output type for the assessClauseRisk function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {
+  ClauseRiskAssessmentInputSchema,
+  ClauseRiskAssessmentOutputSchema,
+  type ClauseRiskAssessmentInput,
+  type ClauseRiskAssessmentOutput,
+} from '@/ai/schemas/clause-risk-assessment';
 
-const ClauseRiskAssessmentInputSchema = z.object({
-  clauseText: z
-    .string()
-    .describe('The text of the legal clause to be assessed.'),
-});
-export type ClauseRiskAssessmentInput = z.infer<typeof ClauseRiskAssessmentInputSchema>;
-
-const ClauseRiskAssessmentOutputSchema = z.object({
-  riskLevel: z
-    .enum(['High', 'Medium', 'Low'])
-    .describe('The assessed risk level of the clause.'),
-  ambiguities: z
-    .string()
-    .describe('A description of any ambiguities found in the clause.'),
-  missingTerms: z
-    .string()
-    .describe('A description of any missing terms in the clause.'),
-  legalPitfalls: z
-    .string()
-    .describe('A description of any potential legal pitfalls in the clause.'),
-  suggestedImprovements: z
-    .string()
-    .describe('Suggested improvements for the clause to mitigate risks.'),
-});
-export type ClauseRiskAssessmentOutput = z.infer<typeof ClauseRiskAssessmentOutputSchema>;
-
-export async function assessClauseRisk(input: ClauseRiskAssessmentInput): Promise<ClauseRiskAssessmentOutput> {
+export async function assessClauseRisk(
+  input: ClauseRiskAssessmentInput
+): Promise<ClauseRiskAssessmentOutput> {
   return assessClauseRiskFlow(input);
 }
 
@@ -48,18 +27,24 @@ const assessClauseRiskPrompt = ai.definePrompt({
   output: {schema: ClauseRiskAssessmentOutputSchema},
   prompt: `You are an expert legal analyst specializing in risk assessment for legal documents.
 
-You will receive a clause from a legal document and must assess its risk level, identify ambiguities and missing terms, highlight potential legal pitfalls, and suggest improvements.
+You will receive the full text of a legal document. Your task is to identify each clause, analyze it, and provide a comprehensive risk assessment for every clause found.
 
-Clause Text: {{{clauseText}}}
+First, segment the document into individual clauses. Clauses are typically denoted by numbers (e.g., 1., 2.1, Clause 3) or distinct paragraphs that represent a single provision.
 
-Respond with the following structure:
-{
-  "riskLevel": "High|Medium|Low",
-  "ambiguities": "Description of any ambiguities",
-  "missingTerms": "Description of any missing terms",
-  "legalPitfalls": "Description of potential legal pitfalls",
-  "suggestedImprovements": "Suggested improvements for the clause"
-}`,
+For each clause, you must perform the following analysis and structure it as an object:
+1.  **clauseNumber**: The number of the clause, if present.
+2.  **clauseText**: The complete text of the clause.
+3.  **riskLevel**: Assess the risk as 'High', 'Medium', or 'Low'.
+4.  **ambiguities**: Describe any unclear language or ambiguities.
+5.  **missingTerms**: Identify any critical terms or conditions that are missing.
+6.  **legalPitfalls**: Highlight potential legal issues or pitfalls.
+7.  **suggestedImprovements**: Provide concrete suggestions for improving the clause to mitigate risks.
+
+Compile the analysis for all clauses into a single JSON object with a "clauses" array.
+
+Document Text:
+{{{documentText}}}
+`,
 });
 
 const assessClauseRiskFlow = ai.defineFlow(
