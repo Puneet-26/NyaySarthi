@@ -16,6 +16,9 @@ import {
 import { cn } from '@/lib/utils';
 
 const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
+  if (!node) {
+    return null;
+  }
   const isRoot = level === 0;
   const hasChildren = Array.isArray(node.children) && node.children.length > 0;
 
