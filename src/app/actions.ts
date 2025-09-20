@@ -10,10 +10,16 @@ import { simplifyLegalClause } from '@/ai/flows/layman-view-simplification';
 import { generateMindMap, MindMapNode } from '@/ai/flows/mind-map-generator';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
+import pdf from 'pdf-parse';
 
 async function extractTextFromDocx(buffer: Buffer): Promise<string> {
   const result = await mammoth.extractRawText({ buffer });
   return result.value;
+}
+
+async function extractTextFromPdf(buffer: Buffer): Promise<string> {
+  const data = await pdf(buffer);
+  return data.text;
 }
 
 export async function analyzeDocument(fileInfo: {
@@ -36,6 +42,8 @@ export async function analyzeDocument(fileInfo: {
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
       documentText = await extractTextFromDocx(buffer);
+    } else if (fileType === 'application/pdf') {
+      documentText = await extractTextFromPdf(buffer);
     } else {
       documentText = buffer.toString('utf-8');
     }
