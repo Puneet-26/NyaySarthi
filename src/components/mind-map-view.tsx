@@ -36,17 +36,11 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
             </p>
           </div>
 
-          {/* Branching lines to children */}
-          {hasChildren && (
-            <>
-              {/* Horizontal line */}
-              <div className="absolute left-full right-full top-1/2 h-px w-16 bg-border" />
-            </>
-          )}
-
           {/* Children container */}
           {hasChildren && (
-            <div className="ml-16 flex flex-col items-start justify-center gap-8">
+            <div className="relative ml-16 flex flex-col items-start justify-center gap-8">
+              {/* Vertical connecting line */}
+              <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/30" />
               {node.children.map((child, index) => (
                 <Node key={index} node={child} level={level + 1} />
               ))}
@@ -57,12 +51,10 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
     );
   }
   
-  const isLeaf = !Array.isArray(node.children) || node.children.length === 0;
-
   return (
     <div className="relative flex items-center">
        {/* Connecting line from parent */}
-       <div className={cn("absolute right-full top-1/2 h-px w-8 bg-border")} />
+       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/30" />
       <div
         className={cn(
           'rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
@@ -72,7 +64,7 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
         <p className="mt-1 text-sm text-muted-foreground">{node.summary}</p>
       </div>
       {hasChildren && (
-        <div className="ml-8 flex flex-col gap-4 border-l pl-8">
+        <div className="relative ml-8 flex flex-col gap-4 border-l border-foreground/30 pl-8">
           {node.children.map((child, index) => (
             <Node key={index} node={child} level={level + 1} />
           ))}
