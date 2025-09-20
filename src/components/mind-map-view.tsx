@@ -24,10 +24,10 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
 
   if (isRoot) {
     return (
-      <div className="flex justify-center">
+      <div className="flex items-start justify-center">
         <div className="relative flex items-center">
           {/* Central Root Node */}
-          <div className="z-10 rounded-lg border-2 border-primary bg-primary/10 p-6 shadow-lg">
+          <div className="z-10 flex-shrink-0 rounded-lg border-2 border-primary bg-primary/10 p-6 shadow-lg">
             <h2 className="text-center font-headline text-2xl font-bold text-primary">
               {node.topic}
             </h2>
@@ -36,12 +36,15 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
             </p>
           </div>
 
+          {/* Horizontal line from root */}
+          {hasChildren && <div className="h-px w-8 bg-foreground/80" />}
+
           {/* Children container */}
           {hasChildren && (
-            <div className="relative ml-16 flex flex-col items-start justify-center gap-8">
+            <div className="relative flex flex-col items-start justify-center gap-8">
               {/* Vertical connecting line */}
-              <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/30" />
-              {node.children.map((child, index) => (
+              <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/80" />
+              {node.children!.map((child, index) => (
                 <Node key={index} node={child} level={level + 1} />
               ))}
             </div>
@@ -54,18 +57,24 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
   return (
     <div className="relative flex items-center">
        {/* Connecting line from parent */}
-       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/50" />
+       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/80" />
       <div
         className={cn(
-          'rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
+          'flex-shrink-0 rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
         )}
       >
         <h3 className="font-headline text-lg">{node.topic}</h3>
         <p className="mt-1 text-sm text-muted-foreground">{node.summary}</p>
       </div>
+
+       {/* Horizontal line from node */}
+      {hasChildren && <div className="h-px w-8 bg-foreground/80" />}
+
       {hasChildren && (
-        <div className="relative ml-8 flex flex-col gap-4 border-l border-foreground/50 pl-8">
-          {node.children.map((child, index) => (
+        <div className="relative flex flex-col items-start justify-center gap-4">
+           {/* Vertical connecting line */}
+           <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/80" />
+          {node.children!.map((child, index) => (
             <Node key={index} node={child} level={level + 1} />
           ))}
         </div>
