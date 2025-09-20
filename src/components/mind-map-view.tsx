@@ -54,7 +54,7 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
   return (
     <div className="relative flex items-center">
        {/* Connecting line from parent */}
-       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/30" />
+       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/50" />
       <div
         className={cn(
           'rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
@@ -64,7 +64,7 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
         <p className="mt-1 text-sm text-muted-foreground">{node.summary}</p>
       </div>
       {hasChildren && (
-        <div className="relative ml-8 flex flex-col gap-4 border-l border-foreground/30 pl-8">
+        <div className="relative ml-8 flex flex-col gap-4 border-l border-foreground/50 pl-8">
           {node.children.map((child, index) => (
             <Node key={index} node={child} level={level + 1} />
           ))}

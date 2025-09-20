@@ -21,13 +21,13 @@ export type GenerateMindMapInput = z.infer<typeof GenerateMindMapInputSchema>;
 const MindMapNodeSchema: z.ZodType<MindMapNode> = z.lazy(() => z.object({
   topic: z.string().describe('The main topic of this node.'),
   summary: z.string().describe('A brief summary of the topic.'),
-  children: z.array(MindMapNodeSchema).describe('An array of child nodes.'),
+  children: z.array(MindMapNodeSchema).optional().describe('An array of child nodes.'),
 }));
 
 export type MindMapNode = {
   topic: string;
   summary: string;
-  children: MindMapNode[];
+  children?: MindMapNode[];
 };
 
 const GenerateMindMapOutputSchema = z.object({
@@ -48,7 +48,7 @@ const prompt = ai.definePrompt({
 
   Your task is to create a hierarchical mind map of the provided legal document. The mind map should break down the document into its core components, such as main sections, key articles, definitions, obligations, rights, and important clauses.
 
-  Analyze the following document text and generate a mind map. The root node should be the document title or main subject. Each node must have a 'topic', a 'summary', and an array of 'children' nodes.
+  Analyze the following document text and generate a mind map. The root node should be the document title or main subject. Each node must have a 'topic', a 'summary', and an array of 'children' nodes. If a node has no children, the 'children' property can be omitted.
 
   Document Text:
   {{{documentText}}}
