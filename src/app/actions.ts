@@ -7,6 +7,7 @@ import {
 } from '@/ai/flows/clause-risk-assessment';
 import { askLegalChatbot } from '@/ai/flows/legal-chatbot';
 import { simplifyLegalClause } from '@/ai/flows/layman-view-simplification';
+import { generateMindMap, MindMapNode } from '@/ai/flows/mind-map-generator';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
 
@@ -19,7 +20,8 @@ export async function analyzeDocument(fileInfo: {
   fileContent: string;
   fileType: string;
 }): Promise<{
-  data?: ClauseAnalysis[];
+  text?: string;
+  clauses?: ClauseAnalysis[];
   error?: string;
 }> {
   try {
@@ -48,7 +50,7 @@ export async function analyzeDocument(fileInfo: {
       .filter(Boolean);
 
     if (clauses.length === 0) {
-      return { error: 'No clauses found in the document. Ensure clauses are prefixed with "Clause X." or "X.".' };
+      return { text: documentText, clauses: [], error: 'No clauses found in the document. Ensure clauses are prefixed with "Clause X." or "X.".' };
     }
 
     const analysisPromises = clauses.map(async (clauseText, index) => {
@@ -63,7 +65,7 @@ export async function analyzeDocument(fileInfo: {
     });
 
     const results = await Promise.all(analysisPromises);
-    return { data: results as ClauseAnalysis[] };
+    return { text: documentText, clauses: results as ClauseAnalysis[] };
   } catch (e: any) {
     console.error('Analysis failed:', e);
     return { error: e.message || 'An unknown error occurred during analysis.' };
@@ -95,6 +97,21 @@ export async function getChatbotResponse(
     console.error('Chatbot failed:', e);
     return {
       error: e.message || 'An unknown error occurred during chat.',
+    };
+  }
+}
+
+export async function getMindMap(
+  documentText: string
+): Promise<{ data?: MindMapNode; error?: string }> {
+  try {
+    const result = await generateMindMap({ documentText });
+    return { data: result.mindMap };
+  } catch (e: any) {
+    console.error('Mind map generation failed:', e);
+    return {
+      error:
+        e.message || 'An unknown error occurred during mind map generation.',
     };
   }
 }
