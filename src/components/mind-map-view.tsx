@@ -19,31 +19,55 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
   const isRoot = level === 0;
   const hasChildren = node.children && node.children.length > 0;
 
-  return (
-    <div className={cn(!isRoot && 'ml-6 pl-6 border-l border-dashed border-primary/50')}>
-      <div className="relative">
-        <div
-          className={cn(
-            'p-4 rounded-lg shadow-sm',
-            isRoot ? 'bg-primary/10 border-primary border-2' : 'bg-card border'
+  if (isRoot) {
+    return (
+      <div className="flex justify-center">
+        <div className="relative flex items-center">
+          {/* Central Root Node */}
+          <div className="z-10 rounded-lg border-2 border-primary bg-primary/10 p-6 shadow-lg">
+            <h2 className="text-center font-headline text-2xl font-bold text-primary">
+              {node.topic}
+            </h2>
+            <p className="mt-2 max-w-xs text-center text-sm text-muted-foreground">
+              {node.summary}
+            </p>
+          </div>
+
+          {/* Branching lines to children */}
+          {hasChildren && (
+            <>
+              {/* Horizontal line */}
+              <div className="absolute left-full right-full top-1/2 h-px w-16 bg-border" />
+            </>
           )}
-        >
-          <h3
-            className={cn(
-              'font-headline',
-               isRoot ? 'text-xl' : 'text-lg',
-            )}
-          >
-            {node.topic}
-          </h3>
-          <p className="mt-1 text-sm text-muted-foreground">{node.summary}</p>
+
+          {/* Children container */}
+          {hasChildren && (
+            <div className="ml-16 flex flex-col items-start justify-center gap-8">
+              {node.children.map((child, index) => (
+                <Node key={index} node={child} level={level + 1} />
+              ))}
+            </div>
+          )}
         </div>
-        {!isRoot && (
-           <div className="absolute -left-6 top-1/2 -translate-y-1/2 h-px w-6 bg-primary/50" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex items-center">
+       {/* Connecting line from parent */}
+       <div className="absolute right-full top-1/2 h-px w-8 bg-border" />
+      <div
+        className={cn(
+          'rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
         )}
+      >
+        <h3 className="font-headline text-lg">{node.topic}</h3>
+        <p className="mt-1 text-sm text-muted-foreground">{node.summary}</p>
       </div>
       {hasChildren && (
-        <div className="mt-4 space-y-4">
+        <div className="ml-8 flex flex-col gap-4 border-l pl-8">
           {node.children.map((child, index) => (
             <Node key={index} node={child} level={level + 1} />
           ))}
@@ -52,7 +76,6 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
     </div>
   );
 };
-
 
 export function MindMapView({ documentText }: { documentText: string }) {
   const [mindMap, setMindMap] = useState<MindMapNode | null>(null);
@@ -104,7 +127,7 @@ export function MindMapView({ documentText }: { documentText: string }) {
   }
 
   return (
-    <div>
+    <div className='p-4 overflow-x-auto'>
         <Node node={mindMap} />
     </div>
   );
