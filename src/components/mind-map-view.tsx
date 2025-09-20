@@ -37,13 +37,13 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
           </div>
 
           {/* Horizontal line from root */}
-          {hasChildren && <div className="h-px w-8 bg-foreground/80" />}
+          {hasChildren && <div className="h-px w-8 bg-foreground/30" />}
 
           {/* Children container */}
           {hasChildren && (
             <div className="relative flex flex-col items-start justify-center gap-8">
               {/* Vertical connecting line */}
-              <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/80" />
+              <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/30" />
               {node.children!.map((child, index) => (
                 <Node key={index} node={child} level={level + 1} />
               ))}
@@ -57,7 +57,7 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
   return (
     <div className="relative flex items-center">
        {/* Connecting line from parent */}
-       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/80" />
+       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/30" />
       <div
         className={cn(
           'flex-shrink-0 rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
@@ -68,12 +68,12 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
       </div>
 
        {/* Horizontal line from node */}
-      {hasChildren && <div className="h-px w-8 bg-foreground/80" />}
+      {hasChildren && <div className="h-px w-8 bg-foreground/30" />}
 
       {hasChildren && (
         <div className="relative flex flex-col items-start justify-center gap-4">
            {/* Vertical connecting line */}
-           <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/80" />
+           <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/30" />
           {node.children!.map((child, index) => (
             <Node key={index} node={child} level={level + 1} />
           ))}
