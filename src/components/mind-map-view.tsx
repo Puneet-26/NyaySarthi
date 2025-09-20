@@ -27,7 +27,7 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
       <div className="flex items-start justify-center">
         <div className="relative flex items-center">
           {/* Central Root Node */}
-          <div className="z-10 flex-shrink-0 rounded-lg border-2 border-primary bg-primary/10 p-6 shadow-lg">
+          <div className="z-10 flex-shrink-0 rounded-lg border-2 border-primary bg-background p-6 shadow-lg">
             <h2 className="text-center font-headline text-2xl font-bold text-primary">
               {node.topic}
             </h2>
@@ -37,16 +37,17 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
           </div>
 
           {/* Horizontal line from root */}
-          {hasChildren && <div className="h-px w-8 bg-foreground/30" />}
+          {hasChildren && <div className="h-px w-8 bg-gradient-to-l from-border to-transparent" />}
 
           {/* Children container */}
           {hasChildren && (
             <div className="relative flex flex-col items-start justify-center gap-8">
               {/* Vertical connecting line */}
-              <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/30" />
-              {node.children!.map((child, index) => (
-                <Node key={index} node={child} level={level + 1} />
-              ))}
+              <div className="absolute bottom-0 left-0 top-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
+              {node.children!.map((child, index) => {
+                if (!child) return null;
+                return <Node key={index} node={child} level={level + 1} />;
+              })}
             </div>
           )}
         </div>
@@ -54,29 +55,34 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
     );
   }
   
+  if (!node.topic && !node.summary) {
+    return null;
+  }
+  
   return (
     <div className="relative flex items-center">
        {/* Connecting line from parent */}
-       <div className="absolute right-full top-1/2 h-px w-8 bg-foreground/30" />
+       <div className="absolute right-full top-1/2 h-px w-8 bg-gradient-to-r from-border to-transparent" />
       <div
         className={cn(
-          'flex-shrink-0 rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
+          'flex-shrink-0 rounded-lg border bg-card p-3 shadow-sm transition-all hover:border-primary hover:shadow-md',
         )}
       >
-        <h3 className="font-headline text-lg">{node.topic}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{node.summary}</p>
+        <h3 className="font-headline text-base">{node.topic}</h3>
+        <p className="mt-1 max-w-xs text-xs text-muted-foreground">{node.summary}</p>
       </div>
 
        {/* Horizontal line from node */}
-      {hasChildren && <div className="h-px w-8 bg-foreground/30" />}
+      {hasChildren && <div className="h-px w-8 bg-gradient-to-l from-border to-transparent" />}
 
       {hasChildren && (
         <div className="relative flex flex-col items-start justify-center gap-4">
            {/* Vertical connecting line */}
-           <div className="absolute bottom-0 left-0 top-0 w-px bg-foreground/30" />
-          {node.children!.map((child, index) => (
-            <Node key={index} node={child} level={level + 1} />
-          ))}
+           <div className="absolute bottom-0 left-0 top-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
+          {node.children!.map((child, index) => {
+             if (!child) return null;
+            return <Node key={index} node={child} level={level + 1} />
+          })}
         </div>
       )}
     </div>
