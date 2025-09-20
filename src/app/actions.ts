@@ -7,6 +7,7 @@ import {
 import { askLegalChatbot } from '@/ai/flows/legal-chatbot';
 import { simplifyLegalClause } from '@/ai/flows/layman-view-simplification';
 import { generateMindMap, MindMapNode } from '@/ai/flows/mind-map-generator';
+import { extractTextFromFile } from '@/ai/flows/extract-text-from-file';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
 
@@ -35,6 +36,9 @@ export async function analyzeDocument(fileInfo: {
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
       documentText = await extractTextFromDocx(buffer);
+    } else if (fileType === 'application/pdf') {
+      const result = await extractTextFromFile({ fileDataUri: fileContent });
+      documentText = result.extractedText;
     } else {
       documentText = buffer.toString('utf-8');
     }
