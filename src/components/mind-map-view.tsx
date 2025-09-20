@@ -62,7 +62,7 @@ const Node = ({ node, level = 0 }: { node: MindMapNode; level?: number }) => {
   return (
     <div className="relative flex items-center">
        {/* Connecting line from parent */}
-       <div className={cn("absolute right-full top-1/2 h-px w-8", isLeaf ? 'bg-border/80' : 'bg-border')} />
+       <div className={cn("absolute right-full top-1/2 h-px w-8 bg-border")} />
       <div
         className={cn(
           'rounded-lg border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md'
