@@ -153,13 +153,13 @@ export function DocumentAnalyzer() {
                   or click to select a file
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Supported formats: .pdf, .txt, .md, .docx
+                  Supported formats: .txt, .md, .docx
                 </p>
                 <input
                   type="file"
                   onChange={handleFileChange}
                   className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                  accept=".pdf,.txt,.md,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
+                  accept=".txt,.md,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 />
               </label>
               {file && (
