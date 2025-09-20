@@ -5,7 +5,7 @@ import {
   ClauseRiskAssessmentOutput,
 } from '@/ai/flows/clause-risk-assessment';
 import { askLegalChatbot } from '@/ai/flows/legal-chatbot';
-import { simplifyLegalClause } from '@/aiflows/layman-view-simplification';
+import { simplifyLegalClause } from '@/ai/flows/layman-view-simplification';
 import { generateMindMap, MindMapNode } from '@/ai/flows/mind-map-generator';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
