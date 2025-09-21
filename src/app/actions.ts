@@ -11,6 +11,7 @@ import mammoth from 'mammoth';
 import { simplifyAnalysis, type SimplifyAnalysisOutput } from '@/ai/flows/simplify-analysis';
 import { getRecentCases } from '@/ai/flows/get-recent-cases';
 import { type RecentCase } from '@/ai/schemas/recent-cases';
+import { searchCasesByYear } from '@/ai/flows/search-cases-by-year';
 
 
 async function extractTextFromDocx(buffer: Buffer): Promise<string> {
@@ -141,6 +142,18 @@ export async function getRecentCasesAction(): Promise<{ data?: RecentCase[]; err
     console.error('Failed to get recent cases:', e);
     return {
       error: e.message || 'An unknown error occurred while fetching recent cases.',
+    };
+  }
+}
+
+export async function searchCasesByYearAction(year: number): Promise<{ data?: RecentCase[]; error?: string; }> {
+  try {
+    const result = await searchCasesByYear({ year });
+    return { data: result.cases };
+  } catch (e: any) {
+    console.error(`Failed to get cases for year ${year}:`, e);
+    return {
+      error: e.message || `An unknown error occurred while fetching cases for ${year}.`,
     };
   }
 }

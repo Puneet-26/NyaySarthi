@@ -10,34 +10,53 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { getRecentCasesAction } from '../actions';
+import { getRecentCasesAction, searchCasesByYearAction } from '../actions';
 import { useEffect, useState } from 'react';
 import { RecentCase } from '@/ai/schemas/recent-cases';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
 function LandmarkCasesPage() {
   const [cases, setCases] = useState<RecentCase[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string>('recent');
 
   useEffect(() => {
     async function fetchCases() {
       setLoading(true);
       setError(null);
-      const result = await getRecentCasesAction();
+      let result;
+      if (selectedYear === 'recent') {
+        result = await getRecentCasesAction();
+      } else {
+        result = await searchCasesByYearAction(parseInt(selectedYear));
+      }
+      
       if (result.error) {
         setError(result.error);
+        setCases([]);
       } else {
         setCases(result.data || []);
       }
       setLoading(false);
     }
     fetchCases();
-  }, []);
+  }, [selectedYear]);
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -54,13 +73,35 @@ function LandmarkCasesPage() {
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
             <h1 className="font-headline text-4xl font-bold">
-              Recent Landmark Cases
+              Landmark Cases
             </h1>
             <p className="mt-2 text-muted-foreground">
-              A collection of pivotal judgments from the Indian judicial system,
-              updated weekly.
+              A collection of pivotal judgments from the Indian judicial system.
             </p>
           </div>
+
+          <div className="mt-8 flex justify-center">
+            <div className="w-full max-w-xs space-y-2">
+              <Label htmlFor="year-select">Select Year</Label>
+              <Select
+                value={selectedYear}
+                onValueChange={setSelectedYear}
+              >
+                <SelectTrigger id="year-select">
+                  <SelectValue placeholder="Select a year" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="recent">Recent Cases</SelectItem>
+                  {years.map(year => (
+                    <SelectItem key={year} value={String(year)}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
 
           <div className="mt-8 grid gap-6">
             {loading ? (
@@ -87,10 +128,10 @@ function LandmarkCasesPage() {
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>
-                  Could not load recent cases. Please try again later.
+                  Could not load cases for the selected year. Please try again later.
                 </AlertDescription>
               </Alert>
-            ) : (
+            ) : cases.length > 0 ? (
               cases.map((caseItem, index) => (
                 <Card key={index}>
                   <CardHeader>
@@ -109,6 +150,12 @@ function LandmarkCasesPage() {
                   </CardFooter>
                 </Card>
               ))
+            ) : (
+                <Card>
+                  <CardContent className="p-6 text-center">
+                    <p className="text-muted-foreground">No cases found for the selected year.</p>
+                  </CardContent>
+                </Card>
             )}
           </div>
         </div>
