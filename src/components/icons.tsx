@@ -7,23 +7,24 @@ export function Logo(props: React.SVGProps<SVGSVGElement> & {className?: string}
       viewBox="0 0 100 100"
       {...props}
     >
-      <g fill="none" stroke="currentColor" strokeWidth="6">
-        {/* Outer decorative circle */}
-        <circle cx="50" cy="50" r="45" />
+      <g fill="currentColor" stroke="none">
+        {/* Base */}
+        <rect x="47" y="80" width="6" height="10" rx="2" />
+        <rect x="30" y="90" width="40" height="5" rx="2" />
 
-        {/* Inner Stylized "NS" */}
-        <text
-          x="50"
-          y="58"
-          fontFamily="var(--font-headline), sans-serif"
-          fontSize="48"
-          fontWeight="bold"
-          fill="currentColor"
-          textAnchor="middle"
-          dominantBaseline="middle"
-        >
-          NS
-        </text>
+        {/* Vertical Beam */}
+        <rect x="47" y="10" width="6" height="75" rx="2" />
+
+        {/* Horizontal Beam */}
+        <rect x="10" y="10" width="80" height="6" rx="2" />
+
+        {/* Left Scale */}
+        <path d="M 15 20 L 15 30 L 25 45 L 35 30 L 35 20 Z" stroke="currentColor" strokeWidth="4" fill="none" />
+        <circle cx="25" cy="13" r="3" fill="currentColor" />
+
+        {/* Right Scale */}
+        <path d="M 65 20 L 65 30 L 75 45 L 85 30 L 85 20 Z" stroke="currentColor" strokeWidth="4" fill="none" />
+        <circle cx="75" cy="13" r="3" fill="currentColor" />
       </g>
     </svg>
   );
