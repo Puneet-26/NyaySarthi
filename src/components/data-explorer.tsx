@@ -37,6 +37,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ScrollArea } from './ui/scroll-area';
+import { searchJudgementsAction } from '@/app/actions';
+import { type Judgement } from '@/ai/schemas/search-judgements';
+import { useToast } from '@/hooks/use-toast';
 
 const indianCourts = [
   'Supreme Court of India',
@@ -71,31 +74,33 @@ export function DataExplorer() {
   const [judges, setJudges] = useState('');
   const [parties, setParties] = useState('');
   const [date, setDate] = useState<DateRange | undefined>();
-  const [judgements, setJudgements] = useState<any[]>([]);
+  const [judgements, setJudgements] = useState<Judgement[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const { toast } = useToast();
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setIsSearching(true);
-    // Mock search results
-    setTimeout(() => {
-      setJudgements([
-        {
-          id: 1,
-          caseName: 'State of U.P. vs. Raj Narain',
-          court: 'Supreme Court of India',
-          judges: 'A.N. Ray, C.J., H.R. Khanna, K.K. Mathew, M.H. Beg, Y.V. Chandrachud',
-          date: '1975-03-26',
-        },
-        {
-          id: 2,
-          caseName: 'Kesavananda Bharati vs. State of Kerala',
-          court: 'Supreme Court of India',
-          judges: 'S.M. Sikri, C.J., A.N. Grover, A.N. Ray, D.G. Palekar, H.R. Khanna, J.M. Shelat, K.K. Mathew, K.S. Hegde, M.H. Beg, P. Jaganmohan Reddy, S.N. Dwivedi, Y.V. Chandrachud',
-          date: '1973-04-24',
-        },
-      ]);
-      setIsSearching(false);
-    }, 1500);
+    setJudgements([]);
+    
+    const result = await searchJudgementsAction({
+      court,
+      judges,
+      parties,
+      dateFrom: date?.from?.toISOString(),
+      dateTo: date?.to?.toISOString(),
+    });
+
+    if (result.error) {
+      toast({
+        variant: 'destructive',
+        title: 'Search Failed',
+        description: result.error,
+      });
+    } else {
+      setJudgements(result.data?.judgements || []);
+    }
+
+    setIsSearching(false);
   };
 
   return (
@@ -226,11 +231,11 @@ export function DataExplorer() {
                       </TableCell>
                     </TableRow>
                   ) : judgements.length > 0 ? (
-                    judgements.map(judgement => (
-                      <TableRow key={judgement.id}>
+                    judgements.map((judgement, index) => (
+                      <TableRow key={index}>
                         <TableCell className="font-medium">{judgement.caseName}</TableCell>
                         <TableCell>{judgement.court}</TableCell>
-                        <TableCell className="max-w-xs truncate">{judgement.judges}</TableCell>
+                        <TableCell className="max-w-xs truncate">{judgement.judges.join(', ')}</TableCell>
                         <TableCell>{judgement.date}</TableCell>
                       </TableRow>
                     ))

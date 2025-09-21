@@ -1,3 +1,4 @@
+'use server';
 import { config } from 'dotenv';
 config();
 
@@ -6,3 +7,4 @@ import '@/ai/flows/layman-view-simplification.ts';
 import '@/ai/flows/legal-chatbot.ts';
 import '@/ai/flows/mind-map-generator.ts';
 import '@/ai/flows/extract-text-from-file.ts';
+import '@/ai/flows/search-judgements.ts';
