@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { Logo } from '@/components/icons';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { Chat } from '@/components/chat';
 import type { Message } from '@/components/chat';
 import { DocumentAnalyzer } from '@/components/document-analyzer';
 import { ContactUs } from '@/components/contact-us';
 import { Separator } from '@/components/ui/separator';
+import { MainMenu } from '@/components/main-menu';
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
@@ -21,7 +21,7 @@ export default function Home() {
             NyaySetu
           </h1>
         </div>
-        <ThemeToggle />
+        <MainMenu />
       </header>
       <div className="flex flex-1 overflow-hidden">
         <main className="flex flex-1 flex-col overflow-y-auto">
