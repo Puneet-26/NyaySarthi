@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/icons';
 import { MainMenu } from '@/components/main-menu';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BarChart, Clock, ShieldCheck } from 'lucide-react';
+import { ArrowRight, BarChart, Clock, ShieldCheck, FileText, UploadCloud, Cpu } from 'lucide-react';
 import Image from 'next/image';
 import { ContactUs } from '@/components/contact-us';
 
@@ -24,6 +24,24 @@ const highlights = [
     icon: <BarChart className="h-8 w-8 text-primary" />,
     title: 'Comprehensive Insights',
     description: 'Get clause-by-clause breakdowns and risk assessments.',
+  },
+];
+
+const howItWorks = [
+  {
+    icon: <UploadCloud className="h-10 w-10 text-primary" />,
+    step: 'Step 1: Upload',
+    description: 'Securely upload your legal document in formats like PDF, DOCX, or TXT.'
+  },
+  {
+    icon: <Cpu className="h-10 w-10 text-primary" />,
+    step: 'Step 2: Analyze',
+    description: 'Our AI analyzes the document, identifying clauses, risks, and ambiguities.'
+  },
+    {
+    icon: <FileText className="h-10 w-10 text-primary" />,
+    step: 'Step 3: Understand',
+    description: 'Receive a simplified summary, risk report, and actionable insights.'
   },
 ];
 
@@ -87,28 +105,92 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+        
+        {/* How It Works Section */}
+        <section className="py-16 sm:py-20">
+           <div className="container mx-auto px-4">
+            <div className="text-center">
+              <h2 className="font-headline text-4xl font-bold">How It Works</h2>
+              <p className="mt-2 text-muted-foreground">
+                Get clarity on your legal documents in three simple steps.
+              </p>
+            </div>
+             <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+               {howItWorks.map((step, index) => (
+                  <div key={index} className="rounded-lg border bg-card p-6 text-center shadow-sm">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                      {step.icon}
+                    </div>
+                    <h3 className="font-headline text-2xl font-semibold">{step.step}</h3>
+                    <p className="mt-2 text-muted-foreground">{step.description}</p>
+                  </div>
+               ))}
+             </div>
+          </div>
+        </section>
 
-        {/* Services Section */}
+
+        {/* Why Choose Us Section */}
+        <section className="bg-muted py-16 sm:py-20">
+          <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
+            <div>
+              <h2 className="font-headline text-4xl font-bold">Why Choose NyaySetu?</h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                In a world filled with complex legal jargon, NyaySetu is your bridge to clarity and confidence. We empower you to understand your rights and obligations without needing a law degree.
+              </p>
+              <ul className="mt-6 space-y-4 text-muted-foreground">
+                <li className="flex items-start">
+                  <ShieldCheck className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
+                  <span><strong>Empowerment:</strong> Make informed decisions by understanding what you're signing.</span>
+                </li>
+                <li className="flex items-start">
+                  <Clock className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
+                  <span><strong>Time-Saving:</strong> Get instant analysis that would take hours to do manually.</span>
+                </li>
+                 <li className="flex items-start">
+                  <BarChart className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
+                  <span><strong>Cost-Effective:</strong> Gain initial insights before committing to expensive legal fees.</span>
+                </li>
+              </ul>
+            </div>
+            <div className="relative h-80 w-full overflow-hidden rounded-lg shadow-xl">
+               <Image
+                src="https://picsum.photos/seed/why-us/800/600"
+                alt="Person reviewing a document"
+                fill
+                className="object-cover"
+                data-ai-hint="reviewing document"
+              />
+            </div>
+          </div>
+        </section>
+
+
+        {/* Document Types Section */}
         <section className="py-16 sm:py-20">
           <div className="container mx-auto px-4">
             <div className="text-center">
-              <h2 className="font-headline text-4xl font-bold">Our Services</h2>
+              <h2 className="font-headline text-4xl font-bold">What We Analyze</h2>
               <p className="mt-2 text-muted-foreground">
-                Everything you need to demystify legal documents.
+                We handle a wide range of common legal and business documents.
               </p>
             </div>
-            <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-               <div className="rounded-lg border bg-card p-6 shadow-sm">
-                <h3 className="font-headline text-2xl font-semibold">Document Analysis</h3>
-                <p className="mt-2 text-muted-foreground">Upload any legal document to get a clause-by-clause risk assessment and simplification.</p>
+            <div className="mt-12 grid grid-cols-2 gap-8 text-center md:grid-cols-4">
+               <div className="space-y-2">
+                <FileText className="mx-auto h-10 w-10 text-primary" />
+                <p className="font-semibold">Rental Agreements</p>
               </div>
-               <div className="rounded-lg border bg-card p-6 shadow-sm">
-                <h3 className="font-headline text-2xl font-semibold">AI Legal Chatbot</h3>
-                <p className="mt-2 text-muted-foreground">Ask any legal question in plain English and get clear, understandable answers from our AI assistant.</p>
+              <div className="space-y-2">
+                <FileText className="mx-auto h-10 w-10 text-primary" />
+                <p className="font-semibold">Employment Contracts</p>
               </div>
-               <div className="rounded-lg border bg-card p-6 shadow-sm">
-                <h3 className="font-headline text-2xl font-semibold">Mind Map Generation</h3>
-                <p className="mt-2 text-muted-foreground">Visualize the structure of your documents with automatically generated mind maps.</p>
+               <div className="space-y-2">
+                <FileText className="mx-auto h-10 w-10 text-primary" />
+                <p className="font-semibold">Vendor Agreements</p>
+              </div>
+               <div className="space-y-2">
+                <FileText className="mx-auto h-10 w-10 text-primary" />
+                <p className="font-semibold">NDAs</p>
               </div>
             </div>
           </div>
