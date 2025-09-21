@@ -124,13 +124,13 @@ export default function LandingPage() {
 
         {/* Why Choose Us Section */}
         <section className="bg-muted py-16 sm:py-20">
-          <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
-            <div>
+          <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4">
+            <div className="text-center">
               <h2 className="font-headline text-4xl font-bold">Why Choose NyaySetu?</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 In a world filled with complex legal jargon, NyaySetu is your bridge to clarity and confidence. We empower you to understand your rights and obligations without needing a law degree.
               </p>
-              <ul className="mt-6 space-y-4 text-muted-foreground">
+              <ul className="mx-auto mt-6 max-w-xl space-y-4 text-left text-muted-foreground">
                 <li className="flex items-start">
                   <ShieldCheck className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
                   <span><strong>Empowerment:</strong> Make informed decisions by understanding what you're signing.</span>
@@ -144,15 +144,6 @@ export default function LandingPage() {
                   <span><strong>Cost-Effective:</strong> Gain initial insights before committing to expensive legal fees.</span>
                 </li>
               </ul>
-            </div>
-             <div className="relative h-80 w-full overflow-hidden rounded-lg shadow-xl">
-               <Image
-                src="https://picsum.photos/seed/legal-robot/800/600"
-                alt="Person reviewing a document"
-                fill
-                className="object-cover"
-                data-ai-hint="legal robot"
-              />
             </div>
           </div>
         </section>
