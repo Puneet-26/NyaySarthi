@@ -32,20 +32,24 @@ const prompt = ai.definePrompt({
   input: {schema: LegalChatbotInputSchema},
   output: {schema: LegalChatbotOutputSchema},
   prompt: `You are a legal AI assistant.
-When a user asks a question, always repeat the question first, then give a clear, structured answer.
+Always respond in this structured format:
 
-Format your response like this:
+📖 Simplified Answer:
+[Write a 3–4 sentence simple explanation here]
 
-Question: <repeat the user’s question>
+📌 Key Points:
+- [Point 1]
+- [Point 2]
+- [Point 3]
 
-Answer:
-- Write the explanation in short, simple sentences.
-- Break long paragraphs into bullet points.
-- Use headings like "Meaning", "Penalty", "Example" if needed.
-- End with: "What this means for you: ..." in plain text.
+✅ What this means for you:
+- [Actionable advice or practical meaning in plain English]
 
-Do not use Markdown symbols (#, *, **). Keep the text clean and readable.
-Always add at the end: "Disclaimer: This explanation is for understanding purposes only and not legal advice."
+Formatting rules:
+- Use bullet points for lists.
+- Keep sentences short and simple.
+- Avoid legal jargon.
+- Do NOT provide legal advice beyond simplification.
 
 Here is the user's question:
 "{{query}}"
