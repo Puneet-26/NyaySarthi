@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition, useRef, useEffect, useCallback } from 'react';
-import { Bot, Loader2, Send, User } from 'lucide-react';
+import { Loader2, Send, User } from 'lucide-react';
 import { getChatbotResponse } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
+import { ChatbotLogo } from './icons';
 
 export type Message = {
   role: 'user' | 'bot';
@@ -90,8 +91,8 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
             )}
           >
              <Avatar className="h-8 w-8 border">
-              <AvatarFallback>
-                {message.role === 'user' ? <User size={16} /> : <Bot size={16} className="text-primary" />}
+              <AvatarFallback className="bg-background">
+                {message.role === 'user' ? <User size={16} /> : <ChatbotLogo className="h-5 w-5" />}
               </AvatarFallback>
             </Avatar>
             {message.role === 'user' && (
@@ -136,8 +137,8 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
     <div className="flex h-full w-full flex-col">
        <div className="flex items-center justify-between gap-4 py-4">
         <div className="flex items-center gap-4">
-          <div className="rounded-full border bg-card p-3">
-            <Bot size={32} className="text-primary" />
+          <div className="rounded-full border bg-card p-2">
+            <ChatbotLogo className="h-10 w-10" />
           </div>
           <div>
             <h2 className="font-headline text-3xl font-semibold">
@@ -152,8 +153,8 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
           {messages.length === 0 && (
              <div className="flex items-start gap-4">
                <Avatar className="h-8 w-8 border">
-                  <AvatarFallback>
-                    <Bot size={16} className="text-primary" />
+                  <AvatarFallback className='bg-background'>
+                    <ChatbotLogo className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
                <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -169,8 +170,8 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
             <Separator className="my-6" />
             <div className="flex items-start gap-4">
                <Avatar className="h-8 w-8 border">
-                  <AvatarFallback>
-                    <Bot size={16} className="text-primary" />
+                  <AvatarFallback className="bg-background">
+                    <ChatbotLogo className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
                 <Loader2 className="h-5 w-5 animate-spin" />
