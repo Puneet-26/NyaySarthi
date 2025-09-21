@@ -60,16 +60,8 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative h-[60vh] w-full">
-          <Image
-            src="https://picsum.photos/seed/legal-hero/1800/1200"
-            alt="Law books and gavel"
-            fill
-            className="object-cover"
-            data-ai-hint="law books gavel"
-          />
-          <div className="absolute inset-0 bg-black/60" />
-          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white">
+        <section className="relative flex h-[60vh] w-full items-center justify-center bg-primary">
+          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-primary-foreground">
             <h1 className="font-headline text-5xl font-bold md:text-7xl">
               AI-Powered Legal Analysis
             </h1>
@@ -77,7 +69,7 @@ export default function LandingPage() {
               Understand complex legal documents with ease. NyaySetu analyzes,
               simplifies, and provides actionable insights.
             </p>
-            <Button asChild className="mt-8" size="lg">
+            <Button asChild className="mt-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" size="lg">
               <Link href="/dashboard">
                 Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -132,13 +124,13 @@ export default function LandingPage() {
 
         {/* Why Choose Us Section */}
         <section className="bg-muted py-16 sm:py-20">
-          <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4">
-            <div className="text-center">
+          <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
+            <div>
               <h2 className="font-headline text-4xl font-bold">Why Choose NyaySetu?</h2>
-              <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+              <p className="mt-4 text-lg text-muted-foreground">
                 In a world filled with complex legal jargon, NyaySetu is your bridge to clarity and confidence. We empower you to understand your rights and obligations without needing a law degree.
               </p>
-              <ul className="mt-6 space-y-4 text-muted-foreground max-w-3xl mx-auto">
+              <ul className="mt-6 space-y-4 text-muted-foreground">
                 <li className="flex items-start">
                   <ShieldCheck className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-primary" />
                   <span><strong>Empowerment:</strong> Make informed decisions by understanding what you're signing.</span>
@@ -152,6 +144,15 @@ export default function LandingPage() {
                   <span><strong>Cost-Effective:</strong> Gain initial insights before committing to expensive legal fees.</span>
                 </li>
               </ul>
+            </div>
+             <div className="relative h-80 w-full overflow-hidden rounded-lg shadow-xl">
+               <Image
+                src="https://picsum.photos/seed/legal-robot/800/600"
+                alt="Person reviewing a document"
+                fill
+                className="object-cover"
+                data-ai-hint="legal robot"
+              />
             </div>
           </div>
         </section>
