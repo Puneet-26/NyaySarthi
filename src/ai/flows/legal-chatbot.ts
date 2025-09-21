@@ -37,7 +37,7 @@ const prompt = ai.definePrompt({
   "{{query}}"
 
   Your response MUST follow this format exactly:
-  1.  Restate the user's question.
+  1.  Start with the line: User's Question: "{{query}}"
   2.  Provide a clear, concise, and informative answer on a new line.
   3.  End your entire response with the following disclaimer on its own new line: "Disclaimer: I am an AI assistant and this is not legal advice. Please consult a qualified legal professional for any legal concerns."
 
