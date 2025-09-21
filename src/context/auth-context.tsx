@@ -85,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     sessionStorage.removeItem('mockUser');
+    setUser(null);
     return signOut(auth);
   };
 
