@@ -35,6 +35,21 @@ const faqs = [
     answer:
       'We take data privacy seriously. Documents are processed securely, and we do not store your files after the analysis is complete. Please refer to our privacy policy for more details.',
   },
+  {
+    question: 'Can I download the simplified summary?',
+    answer:
+      'Yes. After analysis, you can download the simplified version as a PDF (and optionally as a Word document).',
+  },
+  {
+    question: 'Who can benefit from this app?',
+    answer:
+      'Tenants reviewing rental agreements, employees checking job contracts, small businesses reviewing vendor or service agreements, and anyone needing help with legal jargon.',
+  },
+  {
+    question: 'How does the app identify key clauses?',
+    answer:
+      'The app uses AI to detect important clauses such as payment terms, penalties, renewal conditions, confidentiality, and termination rules. These are then summarized in plain English.',
+  },
 ];
 
 export default function FAQPage() {
