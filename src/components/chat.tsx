@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition, useRef, useEffect, useCallback } from 'react';
-import { Loader2, Send, User } from 'lucide-react';
+import { Loader2, Mic, MicOff, Send, User } from 'lucide-react';
 import { getChatbotResponse } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -27,8 +27,10 @@ type ChatProps = {
 export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: ChatProps) {
   const [input, setInput] = useState('');
   const [isPending, startTransition] = useTransition();
+  const [isRecording, setIsRecording] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   const setMessages = useCallback((updater: (prev: Message[]) => Message[]) => {
     if (onMessagesChange) {
@@ -36,10 +38,74 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
     }
   }, [messages, onMessagesChange]);
 
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+
+      recognitionRef.current.onresult = (event: any) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = 0; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        setInput(finalTranscript + interimTranscript);
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        toast({
+          variant: 'destructive',
+          title: 'Voice Input Error',
+          description: `An error occurred: ${event.error}`,
+        });
+        setIsRecording(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        if (isRecording) {
+           // It might end prematurely, so we can restart it if we are still in recording state.
+          recognitionRef.current.start();
+        }
+      };
+
+    }
+  }, [toast, isRecording]);
+  
+  const toggleRecording = () => {
+    if (!recognitionRef.current) {
+       toast({
+        variant: 'destructive',
+        title: 'Browser Not Supported',
+        description: 'Your browser does not support voice input.',
+      });
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      recognitionRef.current.start();
+      setIsRecording(true);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim() || !onMessagesChange) return;
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    }
 
     const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
@@ -185,7 +251,7 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
           <Textarea
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder="Ask a legal question..."
+            placeholder={isRecording ? 'Listening...' : 'Ask a legal question...'}
             className="min-h-0 flex-1 resize-none"
             rows={1}
             onKeyDown={e => {
@@ -195,6 +261,10 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
               }
             }}
           />
+           <Button type="button" size="icon" variant={isRecording ? "destructive" : "ghost"} onClick={toggleRecording}>
+            {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+            <span className="sr-only">{isRecording ? 'Stop recording' : 'Start recording'}</span>
+          </Button>
           <Button type="submit" size="icon" disabled={isPending || !input.trim()}>
             {isPending ? (
               <Loader2 className="h-5 w-5 animate-spin" />
