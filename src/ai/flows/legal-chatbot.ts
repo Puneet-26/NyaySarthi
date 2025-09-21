@@ -51,8 +51,10 @@ Use this exact structure:
 Rules:
 - Always put a blank line (double newline) between sections.
 - Use bullet points.
+- Do not use Markdown symbols (#, *, **). Keep the text clean and readable.
 - Do not merge everything into one paragraph.
 - Do NOT provide legal advice, only simplify and explain.
+- Always add at the end: "Disclaimer: This explanation is for understanding purposes only and not legal advice."
 
 Here is the user's question:
 "{{query}}"
