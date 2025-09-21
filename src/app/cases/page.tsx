@@ -24,39 +24,60 @@ import { useEffect, useState } from 'react';
 import { RecentCase } from '@/ai/schemas/recent-cases';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
 function LandmarkCasesPage() {
   const [cases, setCases] = useState<RecentCase[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingCases, setLoadingCases] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('recent');
 
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
   useEffect(() => {
-    async function fetchCases() {
-      setLoading(true);
-      setError(null);
-      let result;
-      if (selectedYear === 'recent') {
-        result = await getRecentCasesAction();
-      } else {
-        result = await searchCasesByYearAction(parseInt(selectedYear));
-      }
-      
-      if (result.error) {
-        setError(result.error);
-        setCases([]);
-      } else {
-        setCases(result.data || []);
-      }
-      setLoading(false);
+    if (!authLoading && !user) {
+      router.push('/login');
     }
-    fetchCases();
-  }, [selectedYear]);
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      async function fetchCases() {
+        setLoadingCases(true);
+        setError(null);
+        let result;
+        if (selectedYear === 'recent') {
+          result = await getRecentCasesAction();
+        } else {
+          result = await searchCasesByYearAction(parseInt(selectedYear));
+        }
+
+        if (result.error) {
+          setError(result.error);
+          setCases([]);
+        } else {
+          setCases(result.data || []);
+        }
+        setLoadingCases(false);
+      }
+      fetchCases();
+    }
+  }, [selectedYear, user]);
+
+  if (authLoading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -104,7 +125,7 @@ function LandmarkCasesPage() {
 
 
           <div className="mt-8 grid gap-6">
-            {loading ? (
+            {loadingCases ? (
               Array.from({ length: 5 }).map((_, index) => (
                 <Card key={index}>
                   <CardHeader>

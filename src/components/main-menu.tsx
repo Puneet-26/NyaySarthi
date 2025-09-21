@@ -42,21 +42,19 @@ export function MainMenu() {
             </Link>
           </DropdownMenuItem>
           {user && (
-             <DropdownMenuItem asChild>
-              <Link href="/dashboard">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuItem asChild>
-            <Link href="/cases">
-              <Landmark className="mr-2 h-4 w-4" />
-              <span>Landmark Cases</span>
-            </Link>
-          </DropdownMenuItem>
-          {user && (
             <>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Dashboard</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/cases">
+                  <Landmark className="mr-2 h-4 w-4" />
+                  <span>Landmark Cases</span>
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/profile">
                   <User className="mr-2 h-4 w-4" />
