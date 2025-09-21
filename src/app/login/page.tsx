@@ -21,7 +21,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/auth-context';
 import { LoginSchema, type LoginData } from '@/lib/types';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -99,12 +98,6 @@ export default function LoginPage() {
                 </Button>
               </form>
             </Form>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline">
-                Sign up
-              </Link>
-            </div>
           </CardContent>
         </Card>
       </div>

@@ -9,19 +9,15 @@ import {
 } from 'react';
 import {
   onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   signOut,
-  updateProfile,
   type User,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import type { SignUpData, LoginData } from '@/lib/types';
+import type { LoginData } from '@/lib/types';
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
-  signup: (data: SignUpData) => Promise<any>;
   login: (data: LoginData) => Promise<any>;
   logout: () => Promise<void>;
 };
@@ -52,22 +48,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       unsubscribe();
     }
   }, []);
-
-  const signup = async (data: SignUpData) => {
-    const { name, email, password } = data;
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    await updateProfile(userCredential.user, {
-      displayName: name,
-    });
-    // For phone, you would typically use phone auth provider, which is more complex.
-    // Here we're just associating it with the user profile if needed, but not verifying.
-    // A full implementation would involve sending an OTP.
-    return userCredential;
-  };
 
   const login = async (data: LoginData) => {
     const mockUser = {
@@ -111,7 +91,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = {
     user,
     loading,
-    signup,
     login,
     logout,
   };

@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut, FilePlus } from 'lucide-react';
+import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { useAuth } from '@/context/auth-context';
 
@@ -62,20 +62,12 @@ export function MainMenu() {
               <span>Log Out</span>
             </DropdownMenuItem>
           ) : (
-            <>
-              <DropdownMenuItem asChild>
-                <Link href="/login">
-                  <LogIn className="mr-2 h-4 w-4" />
-                  <span>Login</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/signup">
-                  <FilePlus className="mr-2 h-4 w-4" />
-                  <span>Sign Up</span>
-                </Link>
-              </DropdownMenuItem>
-            </>
+            <DropdownMenuItem asChild>
+              <Link href="/login">
+                <LogIn className="mr-2 h-4 w-4" />
+                <span>Login</span>
+              </Link>
+            </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
           <ThemeToggle />
