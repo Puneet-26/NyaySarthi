@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -38,7 +39,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginData) => {
     await login(data);
     toast({ title: 'Login Successful', description: 'Welcome back!' });
-    router.push('/profile');
+    router.push('/dashboard');
   };
 
   return (

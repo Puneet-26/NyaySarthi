@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -10,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut, Landmark } from 'lucide-react';
+import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut, Landmark, LayoutDashboard } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -40,6 +41,14 @@ export function MainMenu() {
               <span>Home</span>
             </Link>
           </DropdownMenuItem>
+          {user && (
+             <DropdownMenuItem asChild>
+              <Link href="/dashboard">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <Link href="/cases">
               <Landmark className="mr-2 h-4 w-4" />
