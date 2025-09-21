@@ -57,7 +57,7 @@ export default function Home() {
         <main className="flex-1 overflow-y-auto">
           {activeView === 'home' && (
             <div className="flex h-full flex-col">
-              <div className="flex items-center justify-center p-4">
+              <div className="flex flex-1 items-center justify-center p-4">
                 <div className="w-full max-w-4xl flex-1">
                   <Chat
                     onMessagesChange={setChatHistory}

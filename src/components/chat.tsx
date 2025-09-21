@@ -126,7 +126,7 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
 
 
   return (
-    <div className="flex h-full max-h-[80vh] w-full flex-col">
+    <div className="flex h-full max-h-[70vh] w-full flex-col">
        <div className="flex items-center justify-between gap-4 p-4">
         <div className="flex items-center gap-4">
           <div className="rounded-full border bg-card p-3">
