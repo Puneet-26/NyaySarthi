@@ -1,18 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/icons';
 import { Chat } from '@/components/chat';
-import type { Message } from '@/components/chat';
 import { DocumentAnalyzer } from '@/components/document-analyzer';
 import { ContactUs } from '@/components/contact-us';
 import { Separator } from '@/components/ui/separator';
 import { MainMenu } from '@/components/main-menu';
 
 export default function Home() {
-  const [chatHistory, setChatHistory] = useState<Message[]>([]);
-
   return (
     <div className="flex h-screen w-full flex-col bg-background">
       <header className="flex h-16 items-center justify-between border-b px-4 sm:px-6">
@@ -31,9 +27,8 @@ export default function Home() {
                 <div className="p-4 md:p-6">
                    <div className="mx-auto w-full max-w-4xl">
                     <Chat
-                      onMessagesChange={setChatHistory}
                       isHistoryPanel={false}
-                      messages={chatHistory}
+                      messages={[]}
                     />
                   </div>
                 </div>
