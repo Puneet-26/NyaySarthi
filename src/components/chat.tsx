@@ -70,14 +70,13 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
       };
 
       recognitionRef.current.onend = () => {
-        if (isRecording) {
-           // It might end prematurely, so we can restart it if we are still in recording state.
-          recognitionRef.current.start();
-        }
+        // Check a local variable instead of the state because the state might be stale in this closure.
+        // We only want to stop if the user explicitly clicked the button.
+        // If the service stops on its own, it should restart.
       };
 
     }
-  }, [toast, isRecording]);
+  }, [toast]);
   
   const toggleRecording = () => {
     if (!recognitionRef.current) {
