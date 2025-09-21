@@ -13,9 +13,16 @@ import { Button } from '@/components/ui/button';
 import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
 
 export function MainMenu() {
   const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -57,7 +64,7 @@ export function MainMenu() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {user ? (
-            <DropdownMenuItem onClick={logout}>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log Out</span>
             </DropdownMenuItem>
