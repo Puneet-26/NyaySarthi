@@ -4,61 +4,61 @@
 
 @layer base {
   :root {
-    --background: 278 38% 96%;
-    --foreground: 278 38% 5%;
-    --card: 316 38% 90%;
-    --card-foreground: 278 38% 5%;
-    --popover: 316 38% 90%;
-    --popover-foreground: 278 38% 5%;
-    --primary: 351 74% 53%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 333 47% 85%;
-    --secondary-foreground: 278 38% 9%;
-    --muted: 333 47% 95%;
-    --muted-foreground: 278 38% 45%;
-    --accent: 332 58% 36%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 316 38% 80%;
-    --input: 316 38% 80%;
-    --ring: 351 74% 53%;
+    --background: 37 33% 97%; /* Ivory / Off-White */
+    --foreground: 0 0% 11%; /* Dark Slate */
+    --card: 0 0% 90%; /* Light Gray */
+    --card-foreground: 0 0% 11%; /* Dark Slate */
+    --popover: 37 33% 97%; /* Ivory / Off-White */
+    --popover-foreground: 0 0% 11%; /* Dark Slate */
+    --primary: 120 60% 34%; /* Forest Green */
+    --primary-foreground: 37 33% 97%;
+    --secondary: 120 18% 34%; /* Muted Olive */
+    --secondary-foreground: 37 33% 97%;
+    --muted: 0 0% 90%; /* Light Gray */
+    --muted-foreground: 0 0% 43%; /* Warm Gray */
+    --accent: 120 18% 34%; /* Muted Olive */
+    --accent-foreground: 37 33% 97%;
+    --destructive: 345 100% 25%; /* Burgundy */
+    --destructive-foreground: 37 33% 97%;
+    --border: 0 0% 80%; /* Lighter Warm Gray for borders */
+    --input: 0 0% 80%;
+    --ring: 120 60% 34%; /* Forest Green */
     --radius: 0.5rem;
-    --chart-1: 351 74% 53%;
-    --chart-2: 332 58% 36%;
-    --chart-3: 316 38% 23%;
-    --chart-4: 350 75% 70%;
-    --chart-5: 333 47% 50%;
+    --chart-1: 120 60% 34%;
+    --chart-2: 120 18% 34%;
+    --chart-3: 43 74% 49%;
+    --chart-4: 345 100% 25%;
+    --chart-5: 0 0% 43%;
     
-    --risk-high: 0 72% 51%;
-    --risk-medium: 45 93% 57%;
-    --risk-low: 142 71% 45%;
+    --risk-high: 345 100% 25%; /* Burgundy */
+    --risk-medium: 43 74% 49%; /* Golden Amber */
+    --risk-low: 120 60% 34%; /* Forest Green */
   }
 
   .dark {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 4%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 351 74% 53%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 332 58% 36%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 311 38% 23%;
+    --background: 0 0% 11%; /* Dark Slate */
+    --foreground: 37 33% 97%; /* Ivory / Off-White */
+    --card: 0 0% 18%; /* Deep Charcoal */
+    --card-foreground: 37 33% 97%;
+    --popover: 0 0% 11%;
+    --popover-foreground: 37 33% 97%;
+    --primary: 120 60% 34%; /* Forest Green */
+    --primary-foreground: 37 33% 97%;
+    --secondary: 120 18% 34%; /* Muted Olive */
+    --secondary-foreground: 37 33% 97%;
+    --muted: 0 0% 18%; /* Deep Charcoal */
     --muted-foreground: 0 0% 63.9%;
-    --accent: 332 58% 36%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 311 38% 15%;
-    --input: 311 38% 15%;
-    --ring: 351 74% 53%;
+    --accent: 120 18% 34%; /* Muted Olive */
+    --accent-foreground: 37 33% 97%;
+    --destructive: 345 70% 45%; /* Lighter Burgundy for dark mode */
+    --destructive-foreground: 37 33% 97%;
+    --border: 0 0% 25%; /* Darker Warm Gray for borders */
+    --input: 0 0% 25%;
+    --ring: 120 60% 34%; /* Forest Green */
 
-    --risk-high: 0 63% 51%;
-    --risk-medium: 45 93% 57%;
-    --risk-low: 142 61% 55%;
+    --risk-high: 345 70% 55%; /* Burgundy */
+    --risk-medium: 43 74% 49%; /* Golden Amber */
+    --risk-low: 120 50% 45%; /* Forest Green */
   }
 }
 
