@@ -60,16 +60,16 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative flex h-[60vh] w-full items-center justify-center bg-primary">
-          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-primary-foreground">
+        <section className="relative flex h-[60vh] w-full items-center justify-center bg-background">
+          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-foreground">
             <h1 className="font-headline text-5xl font-bold md:text-7xl">
               AI-Powered Legal Analysis
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-primary-foreground/80">
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
               Understand complex legal documents with ease. NyaySetu analyzes,
               simplifies, and provides actionable insights.
             </p>
-            <Button asChild className="mt-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" size="lg">
+            <Button asChild className="mt-8" size="lg">
               <Link href="/dashboard">
                 Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
