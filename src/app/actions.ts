@@ -8,11 +8,6 @@ import { generateMindMap, MindMapNode } from '@/ai/flows/mind-map-generator';
 import { extractTextFromFile } from '@/ai/flows/extract-text-from-file';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
-import { searchJudgements } from '@/ai/flows/search-judgements';
-import {
-  type SearchJudgementsInput,
-  type SearchJudgementsOutput,
-} from '@/ai/schemas/search-judgements';
 import { simplifyAnalysis, type SimplifyAnalysisOutput } from '@/ai/flows/simplify-analysis';
 
 
@@ -118,18 +113,6 @@ export async function getMindMap(
       error:
         e.message || 'An unknown error occurred during mind map generation.',
     };
-  }
-}
-
-export async function searchJudgementsAction(
-  input: SearchJudgementsInput
-): Promise<{ data?: SearchJudgementsOutput; error?: string }> {
-  try {
-    const result = await searchJudgements(input);
-    return { data: result };
-  } catch (e: any) {
-    console.error('Search failed:', e);
-    return { error: e.message || 'An unknown error occurred during search.' };
   }
 }
 

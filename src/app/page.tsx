@@ -2,12 +2,11 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Home as HomeIcon, PanelLeft, Database } from 'lucide-react';
+import { Home as HomeIcon } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Chat } from '@/components/chat';
 import type { Message } from '@/components/chat';
-import { DataExplorer } from '@/components/data-explorer';
 import { DocumentAnalyzer } from '@/components/document-analyzer';
 import { ContactUs } from '@/components/contact-us';
 import { Separator } from '@/components/ui/separator';
@@ -15,7 +14,6 @@ import { Separator } from '@/components/ui/separator';
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeView, setActiveView] = useState<'home' | 'explorer'>('home');
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -38,26 +36,16 @@ export default function Home() {
             </div>
             <nav className="flex flex-col gap-1 p-2">
                <Button
-                variant={activeView === 'home' ? 'secondary' : 'ghost'}
+                variant={'secondary'}
                 className="justify-start gap-3"
-                onClick={() => setActiveView('home')}
               >
                 <HomeIcon className="h-5 w-5" />
                 <span>Home</span>
-              </Button>
-              <Button
-                variant={activeView === 'explorer' ? 'secondary' : 'ghost'}
-                className="justify-start gap-3"
-                onClick={() => setActiveView('explorer')}
-              >
-                <Database className="h-5 w-5" />
-                <span>Data Explorer</span>
               </Button>
             </nav>
           </aside>
         )}
         <main className="flex flex-1 flex-col overflow-y-auto">
-          {activeView === 'home' && (
             <div className="flex h-full flex-col">
               <div className="flex-1">
                 <div className="p-4 md:p-6">
@@ -78,8 +66,6 @@ export default function Home() {
                 <ContactUs />
               </div>
             </div>
-          )}
-          {activeView === 'explorer' && <DataExplorer />}
         </main>
       </div>
     </div>
