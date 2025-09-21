@@ -1,15 +1,31 @@
 import * as React from 'react';
-import Image from 'next/image';
 
 export function Logo(props: React.SVGProps<SVGSVGElement> & {className?: string}) {
   return (
-    <Image
-      src="https://storage.googleapis.com/aai-web-samples/program-output/6398f7e2f5f1c5905f5431ef.png"
-      width={32}
-      height={32}
-      alt="NyaySarthi Logo"
-      className={props.className}
-    />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth="6">
+        {/* Outer decorative circle */}
+        <circle cx="50" cy="50" r="45" />
+
+        {/* Inner Stylized "NS" */}
+        <text
+          x="50"
+          y="58"
+          fontFamily="var(--font-headline), sans-serif"
+          fontSize="48"
+          fontWeight="bold"
+          fill="currentColor"
+          textAnchor="middle"
+          dominantBaseline="middle"
+        >
+          NS
+        </text>
+      </g>
+    </svg>
   );
 }
 
