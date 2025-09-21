@@ -34,10 +34,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+      // If we have a mock user from our prototype login, don't overwrite it
+      if (user || !sessionStorage.getItem('mockUser')) {
+         setUser(user);
+      }
       setLoading(false);
     });
-    return () => unsubscribe();
+
+     // Check for mock user on initial load
+    const mockUserJson = sessionStorage.getItem('mockUser');
+    if (mockUserJson) {
+      setUser(JSON.parse(mockUserJson));
+    }
+
+
+    return () => {
+      unsubscribe();
+    }
   }, []);
 
   const signup = async (data: SignUpData) => {
@@ -56,11 +69,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return userCredential;
   };
 
-  const login = (data: LoginData) => {
-    return signInWithEmailAndPassword(auth, data.email, data.password);
+  const login = async (data: LoginData) => {
+    const mockUser = {
+      uid: 'mock-user-id',
+      email: data.email,
+      displayName: 'Prototype User',
+      // Add other User properties as needed, with default/mock values
+      emailVerified: true,
+      isAnonymous: false,
+      photoURL: null,
+      providerId: 'password',
+      metadata: {},
+      providerData: [],
+      refreshToken: 'mock-token',
+      tenantId: null,
+      delete: async () => {},
+      getIdToken: async () => 'mock-id-token',
+      getIdTokenResult: async () => ({
+        token: 'mock-id-token',
+        expirationTime: '',
+        authTime: '',
+        issuedAtTime: '',
+        signInProvider: null,
+        signInSecondFactor: null,
+        claims: {},
+      }),
+      reload: async () => {},
+      toJSON: () => ({}),
+    } as User;
+
+    sessionStorage.setItem('mockUser', JSON.stringify(mockUser));
+    setUser(mockUser);
+    return Promise.resolve();
   };
 
   const logout = () => {
+    sessionStorage.removeItem('mockUser');
     return signOut(auth);
   };
 

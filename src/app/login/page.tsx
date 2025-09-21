@@ -37,17 +37,9 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginData) => {
-    try {
-      await login(data);
-      toast({ title: 'Login Successful', description: 'Welcome back!' });
-      router.push('/profile');
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: error.message,
-      });
-    }
+    await login(data);
+    toast({ title: 'Login Successful', description: 'Welcome back!' });
+    router.push('/profile');
   };
 
   return (
