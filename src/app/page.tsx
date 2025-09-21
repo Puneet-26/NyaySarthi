@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Logo } from '@/components/icons';
 import { Chat } from '@/components/chat';
 import type { Message } from '@/components/chat';
@@ -15,12 +16,12 @@ export default function Home() {
   return (
     <div className="flex h-screen w-full flex-col bg-background">
       <header className="flex h-16 items-center justify-between border-b px-4 sm:px-6">
-        <div className="flex items-center gap-4">
+        <Link href="/" className="flex items-center gap-4">
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
             NyaySetu
           </h1>
-        </div>
+        </Link>
         <MainMenu />
       </header>
       <div className="flex flex-1 overflow-hidden">
