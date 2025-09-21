@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { Separator } from './ui/separator';
 
 export type Message = {
   role: 'user' | 'bot';
@@ -75,42 +76,44 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
     }
   }, [messages]);
 
-  const renderMessages = (messageList: Message[]) => (
-    messageList.map((message, index) => (
-      <div
-        key={index}
-        className={cn(
-          'flex items-start gap-4',
-          message.role === 'user' ? 'justify-end' : ''
-        )}
-      >
-        {message.role === 'bot' && (
-          <Avatar className="h-8 w-8">
-            <AvatarFallback>
-              <Bot className="h-5 w-5" />
-            </AvatarFallback>
-          </Avatar>
-        )}
-        <div
-          className={cn(
-            'max-w-md rounded-lg p-3',
-            message.role === 'user'
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted'
-          )}
-        >
-          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+  const renderMessages = (messageList: Message[]) => {
+     let lastMessageRole: 'user' | 'bot' | null = null;
+    return messageList.map((message, index) => {
+      const showSeparator = message.role === 'bot' && lastMessageRole === 'user';
+      lastMessageRole = message.role;
+      return (
+        <div key={index}>
+          {showSeparator && <Separator className="my-6" />}
+          <div
+            className={cn(
+              'flex items-start gap-4',
+              message.role === 'user' ? 'justify-end' : ''
+            )}
+          >
+            {message.role === 'user' && (
+              <div
+                className={cn(
+                  'max-w-md rounded-lg p-3 bg-muted'
+                )}
+              >
+                <p className="text-sm">{message.content}</p>
+              </div>
+            )}
+             {message.role === 'bot' && (
+                <div
+                className={cn(
+                  'prose prose-sm dark:prose-invert max-w-none'
+                )}
+                dangerouslySetInnerHTML={{
+                  __html: message.content.replace(/\n/g, '<br />'),
+                }}
+              />
+            )}
+          </div>
         </div>
-        {message.role === 'user' && (
-          <Avatar className="h-8 w-8">
-            <AvatarFallback>
-              <User className="h-5 w-5" />
-            </AvatarFallback>
-          </Avatar>
-        )}
-      </div>
-    ))
-  );
+      );
+    });
+  };
   
   if (isHistoryPanel) {
     return (
@@ -144,13 +147,8 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
         <div className="space-y-6 pr-4">
           {messages.length === 0 && (
              <div className="flex items-start gap-4">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>
-                  <Bot className="h-5 w-5" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="max-w-md rounded-lg bg-muted p-3">
-                <p className="text-sm">
+               <div className="prose prose-sm dark:prose-invert max-w-none">
+                <p>
                   Welcome to NyaySetu Chat! Ask me any legal question. Please note, I am an AI assistant and not a substitute for a qualified legal professional.
                 </p>
               </div>
@@ -158,16 +156,12 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
           )}
           {renderMessages(messages)}
           {isPending && (
+            <>
+            <Separator className="my-6" />
             <div className="flex items-start gap-4">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>
-                  <Bot className="h-5 w-5" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="max-w-md rounded-lg bg-muted p-3">
                 <Loader2 className="h-5 w-5 animate-spin" />
-              </div>
             </div>
+            </>
           )}
         </div>
       </ScrollArea>

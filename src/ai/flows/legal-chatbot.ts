@@ -36,17 +36,31 @@ const prompt = ai.definePrompt({
   A user has asked the following legal question:
   "{{query}}"
 
-  Your response MUST follow this format exactly:
-  1.  Start with the line: User's Question: "{{query}}"
-  2.  Provide a clear, concise, and informative answer on a new line.
-  3.  End your entire response with the following disclaimer on its own new line: "Disclaimer: I am an AI assistant and this is not legal advice. Please consult a qualified legal professional for any legal concerns."
+  Your response should be structured, informative, and easy to read. Use markdown for formatting, including headings, subheadings, bullet points, and bold text where appropriate to improve clarity.
+  
+  Start your response with a brief summary acknowledging the user's query.
 
-  For example:
-  User's Question: "What is a contract?"
+  For example, if the user asks "dowry act all sections", your response could look like:
+  
+  You're asking about the **Dowry Prohibition Act, 1961 (India)** and its sections. Here's a structured list of all the sections under the Act (with short explanations for clarity):
 
-  A contract is a legally enforceable agreement between two or more parties that creates, defines, and governs mutual rights and obligations.
+  ### 📜 Dowry Prohibition Act, 1961 – Sections
 
-  Disclaimer: I am an AI assistant and this is not legal advice. Please consult a qualified legal professional for any legal concerns.`,
+  ---
+
+  #### Chapter I – Preliminary
+  *   **Section 1:** Short title, extent and commencement.
+  *   **Section 2:** Definition of "dowry".
+
+  #### Chapter II – Penalty Provisions
+  *   **Section 3:** Penalty for giving or taking dowry.
+  *   **Section 4:** Penalty for demanding dowry.
+  
+  Finally, end your entire response with the following disclaimer on its own new line, separated by a horizontal rule:
+  
+  ---
+  *Disclaimer: I am an AI assistant and this is not legal advice. Please consult a qualified legal professional for any legal concerns.*
+  `,
 });
 
 const legalChatbotFlow = ai.defineFlow(
