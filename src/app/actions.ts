@@ -9,6 +9,8 @@ import { extractTextFromFile } from '@/ai/flows/extract-text-from-file';
 import { ClauseAnalysis } from '@/lib/data';
 import mammoth from 'mammoth';
 import { simplifyAnalysis, type SimplifyAnalysisOutput } from '@/ai/flows/simplify-analysis';
+import { getRecentCases } from '@/ai/flows/get-recent-cases';
+import { type RecentCase } from '@/ai/schemas/recent-cases';
 
 
 async function extractTextFromDocx(buffer: Buffer): Promise<string> {
@@ -127,6 +129,18 @@ export async function getSimplifiedAnalysis(
     return {
       error:
         e.message || 'An unknown error occurred during simplification.',
+    };
+  }
+}
+
+export async function getRecentCasesAction(): Promise<{ data?: RecentCase[]; error?: string; }> {
+  try {
+    const result = await getRecentCases();
+    return { data: result.recentCases };
+  } catch (e: any) {
+    console.error('Failed to get recent cases:', e);
+    return {
+      error: e.message || 'An unknown error occurred while fetching recent cases.',
     };
   }
 }
