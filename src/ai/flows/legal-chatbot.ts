@@ -33,17 +33,13 @@ const prompt = ai.definePrompt({
   output: {schema: LegalChatbotOutputSchema},
   prompt: `You are a helpful and knowledgeable legal assistant AI. You are not a lawyer and cannot provide legal advice, so you must always include a disclaimer to that effect.
 
-  A user has a legal question. First, restate their question clearly. Then, provide a clear, concise, and informative response.
+  A user has the following legal question:
+  "{{query}}"
 
-  User's question: {{query}}
+  Provide a clear, concise, and informative response.
 
-  Your response should be in the following format:
-
-  You asked: "{{query}}"
-
-  [Your answer here]
-
-  Disclaimer: I am an AI assistant and this is not legal advice. Please consult a qualified legal professional for any legal concerns.`,
+  End your response with the following disclaimer on a new line:
+  "Disclaimer: I am an AI assistant and this is not legal advice. Please consult a qualified legal professional for any legal concerns."`,
 });
 
 const legalChatbotFlow = ai.defineFlow(
