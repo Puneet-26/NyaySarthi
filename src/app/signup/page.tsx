@@ -38,9 +38,6 @@ export default function SignUpPage() {
 
   const onSubmit = async (data: SignUpData) => {
     try {
-      // NOTE: OTP verification is not implemented in this step.
-      // This requires a more complex multi-step form with Firebase Phone Auth.
-      // For now, we are just creating the user with email/password and name.
       await signup(data);
       toast({ title: 'Signup Successful', description: 'Your account has been created.' });
       router.push('/profile');
@@ -103,7 +100,7 @@ export default function SignUpPage() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>Phone Number (Optional)</FormLabel>
                       <FormControl>
                         <Input placeholder="+91 98765 43210" {...field} />
                       </FormControl>
