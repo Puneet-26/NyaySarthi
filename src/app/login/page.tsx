@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { Logo } from '@/components/icons';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -99,6 +100,11 @@ export default function LoginPage() {
                 </Button>
               </form>
             </Form>
+             <div className="mt-4 flex items-center justify-center">
+              <Button variant="outline" asChild>
+                <Link href="/">Back to Home</Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
