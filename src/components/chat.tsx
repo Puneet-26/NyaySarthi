@@ -126,8 +126,8 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
 
 
   return (
-    <div className="flex h-full max-h-[70vh] w-full flex-col">
-       <div className="flex items-center justify-between gap-4 p-4">
+    <div className="flex h-full w-full flex-col">
+       <div className="flex items-center justify-between gap-4 py-4">
         <div className="flex items-center gap-4">
           <div className="rounded-full border bg-card p-3">
             <Bot size={32} className="text-primary" />
@@ -141,7 +141,7 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
         </div>
       </div>
       <ScrollArea className="flex-1" ref={scrollAreaRef}>
-        <div className="space-y-6 p-4">
+        <div className="space-y-6 pr-4">
           {messages.length === 0 && (
              <div className="flex items-start gap-4">
               <Avatar className="h-8 w-8">
