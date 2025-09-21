@@ -2,13 +2,15 @@
 
 import Link from 'next/link';
 import { Logo } from '@/components/icons';
-import { Chat } from '@/components/chat';
+import { Chat, type Message } from '@/components/chat';
 import { DocumentAnalyzer } from '@/components/document-analyzer';
 import { ContactUs } from '@/components/contact-us';
 import { Separator } from '@/components/ui/separator';
 import { MainMenu } from '@/components/main-menu';
+import { useState } from 'react';
 
 export default function Home() {
+  const [messages, setMessages] = useState<Message[]>([]);
   return (
     <div className="flex h-screen w-full flex-col bg-background">
       <header className="flex h-16 items-center justify-between border-b px-4 sm:px-6">
@@ -28,7 +30,8 @@ export default function Home() {
                    <div className="mx-auto w-full max-w-4xl">
                     <Chat
                       isHistoryPanel={false}
-                      messages={[]}
+                      messages={messages}
+                      onMessagesChange={(newMessages) => setMessages(newMessages)}
                     />
                   </div>
                 </div>
