@@ -11,9 +11,9 @@ import Link from 'next/link';
 
 const faqs = [
   {
-    question: 'What is NyaySetu?',
+    question: 'What is NyaySarthi?',
     answer:
-      'NyaySetu is an AI-powered legal analysis tool designed to help users understand complex legal documents. It analyzes clauses, identifies risks, and provides simplified explanations.',
+      'NyaySarthi is an AI-powered legal analysis tool designed to help users understand complex legal documents. It analyzes clauses, identifies risks, and provides simplified explanations.',
   },
   {
     question: 'What types of documents can I analyze?',
@@ -23,7 +23,7 @@ const faqs = [
   {
     question: 'Is the legal analysis a substitute for professional legal advice?',
     answer:
-      'No. While NyaySetu provides powerful insights and simplifies legal jargon, it is not a substitute for advice from a qualified legal professional. The analysis is for informational purposes only.',
+      'No. While NyaySarthi provides powerful insights and simplifies legal jargon, it is not a substitute for advice from a qualified legal professional. The analysis is for informational purposes only.',
   },
   {
     question: 'How accurate is the risk assessment?',
@@ -59,7 +59,7 @@ export default function FAQPage() {
         <Link href="/" className="flex items-center gap-4">
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
-            NyaySetu
+            NyaySarthi
           </h1>
         </Link>
         <MainMenu />
@@ -71,7 +71,7 @@ export default function FAQPage() {
               Frequently Asked Questions
             </h1>
             <p className="mt-2 text-muted-foreground">
-              Find answers to common questions about NyaySetu.
+              Find answers to common questions about NyaySarthi.
             </p>
           </div>
           <Accordion type="single" collapsible className="mt-8 w-full">

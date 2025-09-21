@@ -39,7 +39,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-4">
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
-            NyaySetu
+            NyaySarthi
           </h1>
         </div>
         <MainMenu />

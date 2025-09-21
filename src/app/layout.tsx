@@ -9,7 +9,7 @@ import { AuthProvider } from '@/context/auth-context';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'NyaySetu - AI Legal Analysis',
+  title: 'NyaySarthi - AI Legal Analysis',
   description: 'Analyze legal documents clause by clause with AI.',
 };
 

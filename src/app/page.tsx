@@ -52,7 +52,7 @@ export default function LandingPage() {
         <Link href="/" className="flex items-center gap-4">
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground">
-            NyaySetu
+            NyaySarthi
           </h1>
         </Link>
         <MainMenu />
@@ -60,13 +60,13 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative flex h-[60vh] w-full items-center justify-center bg-background">
-          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-foreground">
+        <section className="relative flex h-[60vh] w-full items-center justify-center bg-background text-foreground">
+          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
             <h1 className="font-headline text-5xl font-bold md:text-7xl">
               AI-Powered Legal Analysis
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Understand complex legal documents with ease. NyaySetu analyzes,
+              Understand complex legal documents with ease. NyaySarthi analyzes,
               simplifies, and provides actionable insights.
             </p>
             <Button asChild className="mt-8" size="lg">
@@ -129,9 +129,9 @@ export default function LandingPage() {
         <section className="bg-muted py-16 sm:py-20">
           <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4">
             <div className="text-center">
-              <h2 className="font-headline text-4xl font-bold">Why Choose NyaySetu?</h2>
+              <h2 className="font-headline text-4xl font-bold">Why Choose NyaySarthi?</h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                In a world filled with complex legal jargon, NyaySetu is your bridge to clarity and confidence. We empower you to understand your rights and obligations without needing a law degree.
+                In a world filled with complex legal jargon, NyaySarthi is your bridge to clarity and confidence. We empower you to understand your rights and obligations without needing a law degree.
               </p>
               <ul className="mx-auto mt-6 max-w-xl space-y-4 text-left text-muted-foreground">
                 <li className="flex items-start">

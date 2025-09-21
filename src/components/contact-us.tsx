@@ -9,7 +9,7 @@ export function ContactUs() {
     <footer className="w-full bg-card text-card-foreground">
       <div className="container mx-auto grid grid-cols-1 gap-8 px-4 py-12 md:grid-cols-3 md:px-6">
         <div className="space-y-4">
-          <h3 className="font-headline text-xl font-bold">NyaySetu</h3>
+          <h3 className="font-headline text-xl font-bold">NyaySarthi</h3>
           <p className="text-muted-foreground">
             AI-powered legal analysis for everyone.
           </p>
@@ -30,7 +30,7 @@ export function ContactUs() {
           <div className="space-y-2 text-sm text-muted-foreground">
             <p>123 Legal Tech Avenue, Suite 456</p>
             <p>New Delhi, 110001, India</p>
-            <p>Email: contact@nyaysetu.com</p>
+            <p>Email: contact@nyaysarthi.com</p>
             <p>Phone: +91 98765 43210</p>
           </div>
         </div>
@@ -50,7 +50,7 @@ export function ContactUs() {
       </div>
       <div className="border-t">
         <div className="container mx-auto flex items-center justify-between px-4 py-4 text-sm text-muted-foreground md:px-6">
-          <p>&copy; 2024 NyaySetu. All rights reserved.</p>
+          <p>&copy; 2024 NyaySarthi. All rights reserved.</p>
         </div>
       </div>
     </footer>

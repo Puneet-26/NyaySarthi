@@ -51,7 +51,7 @@ export default function LoginPage() {
              <div className="mx-auto mb-4 flex items-center gap-4">
                 <Logo className="h-10 w-10 text-primary" />
                 <h1 className="font-headline text-3xl font-bold tracking-tight text-foreground">
-                  NyaySetu
+                  NyaySarthi
                 </h1>
               </div>
             <CardTitle className="text-2xl">Welcome Back</CardTitle>
