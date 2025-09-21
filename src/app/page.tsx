@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Home as HomeIcon } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Chat } from '@/components/chat';
@@ -13,7 +11,6 @@ import { Separator } from '@/components/ui/separator';
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -27,24 +24,6 @@ export default function Home() {
         <ThemeToggle />
       </header>
       <div className="flex flex-1 overflow-hidden">
-        {isSidebarOpen && (
-          <aside className="hidden w-72 flex-col border-r bg-card/50 lg:flex">
-            <div className="flex h-14 items-center border-b px-4">
-              <h2 className="font-headline text-lg font-semibold">
-                Menu
-              </h2>
-            </div>
-            <nav className="flex flex-col gap-1 p-2">
-               <Button
-                variant={'secondary'}
-                className="justify-start gap-3"
-              >
-                <HomeIcon className="h-5 w-5" />
-                <span>Home</span>
-              </Button>
-            </nav>
-          </aside>
-        )}
         <main className="flex flex-1 flex-col overflow-y-auto">
             <div className="flex h-full flex-col">
               <div className="flex-1">
