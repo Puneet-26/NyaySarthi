@@ -6,8 +6,8 @@ import { Logo } from '@/components/icons';
 import { MainMenu } from '@/components/main-menu';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BarChart, Clock, ShieldCheck, FileText, UploadCloud, Cpu } from 'lucide-react';
-import Image from 'next/image';
 import { ContactUs } from '@/components/contact-us';
+import { Separator } from '@/components/ui/separator';
 
 const highlights = [
   {
@@ -98,6 +98,8 @@ export default function LandingPage() {
           </div>
         </section>
         
+        <Separator />
+
         {/* How It Works Section */}
         <section className="py-16 sm:py-20">
            <div className="container mx-auto px-4">
@@ -121,6 +123,7 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <Separator />
 
         {/* Why Choose Us Section */}
         <section className="bg-muted py-16 sm:py-20">
@@ -148,6 +151,7 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <Separator />
 
         {/* Document Types Section */}
         <section className="py-16 sm:py-20">
