@@ -63,12 +63,6 @@ export function MainMenu() {
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="#">
-                  <BookUser className="mr-2 h-4 w-4" />
-                  <span>My Documents</span>
-                </Link>
-              </DropdownMenuItem>
             </>
           )}
           <DropdownMenuItem asChild>
