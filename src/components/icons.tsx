@@ -1,15 +1,15 @@
 import * as React from 'react';
+import Image from 'next/image';
 
-export function Logo(props: React.SVGProps<SVGSVGElement>) {
+export function Logo(props: React.SVGProps<SVGSVGElement> & {className?: string}) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 64 64"
-      fill="currentColor"
-      {...props}
-    >
-      <path d="M60.4,18.3h-5.8V15.7c0-1.2-0.9-2.1-2.1-2.1h-7.6c-1.2,0-2.1,0.9-2.1,2.1v2.6h-4.3V10.1c0-1.2-0.9-2.1-2.1-2.1H27.8c-1.2,0-2.1,0.9-2.1,2.1v8.2H21.4V15.7c0-1.2-0.9-2.1-2.1-2.1h-7.6c-1.2,0-2.1,0.9-2.1,2.1v2.6H3.6c-1.2,0-2.1,0.9-2.1,2.1v2.1c0,1.2,0.9,2.1,2.1,2.1h5.8v1.3L5,28.2c-1.7,1.5-2.2,4-1.2,6.1l2.8,5.9c1,2.1,3.4,3.1,5.6,2.3L27.8,36h8.4l15.6,6.5c2.2,0.8,4.6-0.2,5.6-2.3l2.8-5.9c1-2.1,0.5-4.6-1.2-6.1l-4.4-4.4V22.5h5.8c1.2,0,2.1-0.9,2.1-2.1v-2.1C62.5,19.2,61.5,18.3,60.4,18.3z M20.4,43.3L10.3,39l-2.1-4.4l12.2-4.4L20.4,43.3z M55.8,34.6l-2.1,4.4L43.6,43.3L43.6,30.2L55.8,34.6z"/>
-    </svg>
+    <Image
+      src="https://storage.googleapis.com/aai-web-samples/program-output/6398f7e2f5f1c5905f5431ef.png"
+      width={32}
+      height={32}
+      alt="NyaySarthi Logo"
+      className={props.className}
+    />
   );
 }
 
