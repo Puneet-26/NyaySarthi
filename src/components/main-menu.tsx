@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut } from 'lucide-react';
+import { Menu, User, BookUser, HelpCircle, Home, LogIn, LogOut, Landmark } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -38,6 +38,12 @@ export function MainMenu() {
             <Link href="/">
               <Home className="mr-2 h-4 w-4" />
               <span>Home</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/cases">
+              <Landmark className="mr-2 h-4 w-4" />
+              <span>Landmark Cases</span>
             </Link>
           </DropdownMenuItem>
           {user && (
