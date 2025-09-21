@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Home as HomeIcon, PanelLeft, Database } from 'lucide-react';
 import { Logo } from '@/components/icons';
@@ -9,11 +9,35 @@ import { Chat } from '@/components/chat';
 import type { Message } from '@/components/chat';
 import { DataExplorer } from '@/components/data-explorer';
 import { DocumentAnalyzer } from '@/components/document-analyzer';
+import { ContactUs } from '@/components/contact-us';
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeView, setActiveView] = useState<'home' | 'explorer'>('home');
+  const [showContact, setShowContact] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+
+  const handleScroll = () => {
+    if (mainRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = mainRef.current;
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        setShowContact(true);
+      } else {
+        setShowContact(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const mainEl = mainRef.current;
+    if (mainEl) {
+      mainEl.addEventListener('scroll', handleScroll);
+      return () => {
+        mainEl.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [activeView]);
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -54,7 +78,7 @@ export default function Home() {
             </nav>
           </aside>
         )}
-        <main className="flex flex-1 flex-col overflow-y-auto">
+        <main ref={mainRef} className="flex flex-1 flex-col overflow-y-auto">
           {activeView === 'home' && (
             <div className="flex h-full flex-col">
               <div className="flex flex-1 flex-col p-4 md:p-6">
@@ -72,6 +96,11 @@ export default function Home() {
             </div>
           )}
           {activeView === 'explorer' && <DataExplorer />}
+           {showContact && (
+              <div className="mt-auto">
+                <ContactUs />
+              </div>
+            )}
         </main>
       </div>
     </div>
