@@ -86,17 +86,21 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
           {showSeparator && <Separator className="my-6" />}
           <div
             className={cn(
-              'flex items-start gap-4',
-              message.role === 'user' ? 'justify-end' : ''
+              'flex items-start gap-4'
             )}
           >
+             <Avatar className="h-8 w-8 border">
+              <AvatarFallback>
+                {message.role === 'user' ? <User size={16} /> : <Bot size={16} className="text-primary" />}
+              </AvatarFallback>
+            </Avatar>
             {message.role === 'user' && (
               <div
                 className={cn(
-                  'max-w-md rounded-lg p-3 bg-muted'
+                  'max-w-md rounded-lg p-3'
                 )}
               >
-                <p className="text-sm">{message.content}</p>
+                <p className="text-sm font-medium">{message.content}</p>
               </div>
             )}
              {message.role === 'bot' && (
@@ -147,6 +151,11 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
         <div className="space-y-6 pr-4">
           {messages.length === 0 && (
              <div className="flex items-start gap-4">
+               <Avatar className="h-8 w-8 border">
+                  <AvatarFallback>
+                    <Bot size={16} className="text-primary" />
+                  </AvatarFallback>
+                </Avatar>
                <div className="prose prose-sm dark:prose-invert max-w-none">
                 <p>
                   Welcome to NyaySetu Chat! Ask me any legal question. Please note, I am an AI assistant and not a substitute for a qualified legal professional.
@@ -159,6 +168,11 @@ export function Chat({ isHistoryPanel = false, messages, onMessagesChange }: Cha
             <>
             <Separator className="my-6" />
             <div className="flex items-start gap-4">
+               <Avatar className="h-8 w-8 border">
+                  <AvatarFallback>
+                    <Bot size={16} className="text-primary" />
+                  </AvatarFallback>
+                </Avatar>
                 <Loader2 className="h-5 w-5 animate-spin" />
             </div>
             </>
