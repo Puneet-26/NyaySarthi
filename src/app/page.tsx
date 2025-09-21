@@ -41,7 +41,7 @@ export default function Home() {
                 
                 <DocumentAnalyzer />
               </div>
-              <div className="mt-auto">
+              <div id="contact-us" className="mt-auto">
                 <ContactUs />
               </div>
             </div>

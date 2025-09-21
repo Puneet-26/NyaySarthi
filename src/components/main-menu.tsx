@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Menu, User, BookUser } from 'lucide-react';
+import { Menu, User, BookUser, HelpCircle } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 export function MainMenu() {
@@ -22,13 +23,23 @@ export function MainMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+        <DropdownMenuItem asChild>
+          <Link href="#">
+            <User className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <BookUser className="mr-2 h-4 w-4" />
-          <span>My Documents</span>
+        <DropdownMenuItem asChild>
+          <Link href="#">
+            <BookUser className="mr-2 h-4 w-4" />
+            <span>My Documents</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/faq">
+            <HelpCircle className="mr-2 h-4 w-4" />
+            <span>FAQ</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <ThemeToggle />
