@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { analyzeDocument } from '@/app/actions';
 import { ClauseAnalysis } from '@/lib/data';
 import { ClauseCard } from '@/components/clause-card';
-import { UploadCloud, File, Loader2, AlertTriangle, BarChart, List, Share2 } from 'lucide-react';
+import { UploadCloud, File, Loader2, AlertTriangle, BarChart, List, Download } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { MindMapView } from './mind-map-view';
 
@@ -115,6 +115,50 @@ export function DocumentAnalyzer() {
     });
   };
 
+  const handleDownload = () => {
+    if (!analysisResult?.clauses || analysisResult.clauses.length === 0) {
+      toast({
+        variant: 'destructive',
+        title: 'No summary to download',
+        description: 'Please analyze a document first.',
+      });
+      return;
+    }
+
+    const { clauses } = analysisResult;
+    const fileName = file ? `${file.name.split('.').slice(0, -1).join('.')}_analysis.txt` : 'analysis.txt';
+    let summaryContent = `Document Analysis Summary: ${fileName}\n\n`;
+
+    summaryContent += `Total Clauses Found: ${clauses.length}\n`;
+    summaryContent += `High Risk: ${clauses.filter(c => c.riskLevel === 'High').length}\n`;
+    summaryContent += `Medium Risk: ${clauses.filter(c => c.riskLevel === 'Medium').length}\n`;
+    summaryContent += `Low Risk: ${clauses.filter(c => c.riskLevel === 'Low').length}\n`;
+    summaryContent += '--- \n\n';
+
+    clauses.forEach(clause => {
+      summaryContent += `Clause ${clause.clauseNumber}\n`;
+      summaryContent += `Risk Level: ${clause.riskLevel}\n`;
+      summaryContent += `Text: ${clause.clauseText}\n`;
+      summaryContent += `\nAnalysis:\n`;
+      summaryContent += `- Ambiguities: ${clause.ambiguities}\n`;
+      summaryContent += `- Missing Terms: ${clause.missingTerms}\n`;
+      summaryContent += `- Legal Pitfalls: ${clause.legalPitfalls}\n`;
+      summaryContent += `- Suggested Improvements: ${clause.suggestedImprovements}\n`;
+      summaryContent += '--- \n\n';
+    });
+
+    const blob = new Blob([summaryContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+
   const riskCounts =
     analysisResult?.clauses?.reduce(
       (acc, clause) => {
@@ -212,10 +256,18 @@ export function DocumentAnalyzer() {
               </Card>
             ) : (
                <Tabs defaultValue="analysis">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="analysis">Risk Analysis</TabsTrigger>
-                  <TabsTrigger value="mindmap">Mind Map</TabsTrigger>
-                </TabsList>
+                 <div className="flex justify-between items-center mb-2">
+                    <TabsList className="grid w-full grid-cols-2 max-w-sm">
+                      <TabsTrigger value="analysis">Risk Analysis</TabsTrigger>
+                      <TabsTrigger value="mindmap">Mind Map</TabsTrigger>
+                    </TabsList>
+                    {analysisResult.clauses && analysisResult.clauses.length > 0 && (
+                      <Button variant="outline" onClick={handleDownload}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Summary
+                      </Button>
+                    )}
+                  </div>
                  <TabsContent value="analysis" className="mt-6">
                    {analysisResult.clauses && analysisResult.clauses.length > 0 ? (
                     <>
@@ -309,3 +361,5 @@ export function DocumentAnalyzer() {
     </div>
   );
 }
+
+    
