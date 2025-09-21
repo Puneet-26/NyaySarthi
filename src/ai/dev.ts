@@ -8,3 +8,4 @@ import '@/ai/flows/legal-chatbot.ts';
 import '@/ai/flows/mind-map-generator.ts';
 import '@/ai/flows/extract-text-from-file.ts';
 import '@/ai/flows/search-judgements.ts';
+import '@/ai/flows/simplify-analysis.ts';

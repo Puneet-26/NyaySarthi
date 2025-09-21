@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
-import { analyzeDocument } from '@/app/actions';
+import { analyzeDocument, getSimplifiedAnalysis } from '@/app/actions';
 import { ClauseAnalysis } from '@/lib/data';
 import { ClauseCard } from '@/components/clause-card';
 import { UploadCloud, File, Loader2, AlertTriangle, BarChart, List, Download } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { MindMapView } from './mind-map-view';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 type AnalysisResult = {
   text?: string;
@@ -21,6 +23,7 @@ type AnalysisResult = {
 export function DocumentAnalyzer() {
   const [file, setFile] = useState<File | null>(null);
   const [isAnalyzing, startTransition] = useTransition();
+  const [isDownloading, setIsDownloading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
@@ -115,7 +118,7 @@ export function DocumentAnalyzer() {
     });
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!analysisResult?.clauses || analysisResult.clauses.length === 0) {
       toast({
         variant: 'destructive',
@@ -124,38 +127,92 @@ export function DocumentAnalyzer() {
       });
       return;
     }
+    
+    setIsDownloading(true);
+    
+    try {
+      const simplifiedResult = await getSimplifiedAnalysis(analysisResult.clauses);
 
-    const { clauses } = analysisResult;
-    const fileName = file ? `${file.name.split('.').slice(0, -1).join('.')}_analysis.txt` : 'analysis.txt';
-    let summaryContent = `Document Analysis Summary: ${fileName}\n\n`;
+      if (simplifiedResult.error || !simplifiedResult.data) {
+        toast({
+          variant: 'destructive',
+          title: 'Simplification Failed',
+          description: simplifiedResult.error || 'Could not generate simplified summary.',
+        });
+        return;
+      }
+      
+      const { documentTitle, overallRisk, summary, simplifiedClauses } = simplifiedResult.data;
 
-    summaryContent += `Total Clauses Found: ${clauses.length}\n`;
-    summaryContent += `High Risk: ${clauses.filter(c => c.riskLevel === 'High').length}\n`;
-    summaryContent += `Medium Risk: ${clauses.filter(c => c.riskLevel === 'Medium').length}\n`;
-    summaryContent += `Low Risk: ${clauses.filter(c => c.riskLevel === 'Low').length}\n`;
-    summaryContent += '--- \n\n';
+      const doc = new jsPDF();
+      
+      // Add header
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text(documentTitle, 14, 22);
+      
+      doc.setFontSize(11);
+      doc.setTextColor(100);
+      doc.text(`Overall Risk: ${overallRisk}`, 14, 30);
+      
+      // Add summary
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(12);
+      const splitSummary = doc.splitTextToSize(summary, 180);
+      doc.text(splitSummary, 14, 40);
 
-    clauses.forEach(clause => {
-      summaryContent += `Clause ${clause.clauseNumber}\n`;
-      summaryContent += `Risk Level: ${clause.riskLevel}\n`;
-      summaryContent += `Text: ${clause.clauseText}\n`;
-      summaryContent += `\nAnalysis:\n`;
-      summaryContent += `- Ambiguities: ${clause.ambiguities}\n`;
-      summaryContent += `- Missing Terms: ${clause.missingTerms}\n`;
-      summaryContent += `- Legal Pitfalls: ${clause.legalPitfalls}\n`;
-      summaryContent += `- Suggested Improvements: ${clause.suggestedImprovements}\n`;
-      summaryContent += '--- \n\n';
-    });
+      // Add table of simplified clauses
+      const tableColumn = ["Clause", "Risk", "Simplified Explanation"];
+      const tableRows: (string | number)[][] = [];
 
-    const blob = new Blob([summaryContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      simplifiedClauses.forEach(clause => {
+        const row = [
+          clause.clauseNumber,
+          clause.riskLevel,
+          doc.splitTextToSize(clause.simplifiedExplanation, 100)
+        ];
+        tableRows.push(row);
+      });
+
+      (doc as any).autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 60,
+        theme: 'striped',
+        styles: {
+          font: 'helvetica',
+          fontSize: 10,
+        },
+        headStyles: {
+          fillColor: [22, 160, 133],
+          textColor: 255,
+          fontStyle: 'bold',
+        },
+        didParseCell: function (data: any) {
+            if (data.column.dataKey === 1) { // Risk Level column
+                if (data.cell.raw === 'High') {
+                    data.cell.styles.textColor = '#e53e3e';
+                } else if (data.cell.raw === 'Medium') {
+                    data.cell.styles.textColor = '#dd6b20';
+                } else {
+                     data.cell.styles.textColor = '#38a169';
+                }
+            }
+        },
+      });
+      
+      const fileName = file ? `${file.name.split('.').slice(0, -1).join('.')}_summary.pdf` : 'summary.pdf';
+      doc.save(fileName);
+
+    } catch (e: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Download Failed',
+        description: e.message || 'An unexpected error occurred while creating the PDF.',
+      });
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
 
@@ -262,9 +319,13 @@ export function DocumentAnalyzer() {
                       <TabsTrigger value="mindmap">Mind Map</TabsTrigger>
                     </TabsList>
                     {analysisResult.clauses && analysisResult.clauses.length > 0 && (
-                      <Button variant="outline" onClick={handleDownload}>
-                        <Download className="mr-2 h-4 w-4" />
-                        Download Summary
+                      <Button variant="outline" onClick={handleDownload} disabled={isDownloading}>
+                        {isDownloading ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Download className="mr-2 h-4 w-4" />
+                        )}
+                        Download PDF
                       </Button>
                     )}
                   </div>
@@ -361,5 +422,3 @@ export function DocumentAnalyzer() {
     </div>
   );
 }
-
-    

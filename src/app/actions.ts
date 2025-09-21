@@ -13,6 +13,7 @@ import {
   type SearchJudgementsInput,
   type SearchJudgementsOutput,
 } from '@/ai/schemas/search-judgements';
+import { simplifyAnalysis, type SimplifyAnalysisOutput } from '@/ai/flows/simplify-analysis';
 
 
 async function extractTextFromDocx(buffer: Buffer): Promise<string> {
@@ -129,5 +130,20 @@ export async function searchJudgementsAction(
   } catch (e: any) {
     console.error('Search failed:', e);
     return { error: e.message || 'An unknown error occurred during search.' };
+  }
+}
+
+export async function getSimplifiedAnalysis(
+  analysis: ClauseAnalysis[]
+): Promise<{ data?: SimplifyAnalysisOutput; error?: string }> {
+  try {
+    const result = await simplifyAnalysis({ analysis: JSON.stringify(analysis) });
+    return { data: result };
+  } catch (e: any) {
+    console.error('Simplification failed:', e);
+    return {
+      error:
+        e.message || 'An unknown error occurred during simplification.',
+    };
   }
 }
